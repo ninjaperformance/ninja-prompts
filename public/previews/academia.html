@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME - Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-background: #1C1714;
+            --color-background-alt: #251E19;
+            --color-foreground: #E8DFD4;
+            --color-muted: #3D332B;
+            --color-muted-foreground: #9C8B7A;
+            --color-accent: #C9A962;
+            --color-accent-secondary: #8B2635;
+            --color-border: #4A3F35;
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Crimson Pro', serif;
+            --font-display: 'Cinzel', serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background);
+            color: var(--color-foreground);
+            line-height: 1.625;
+            font-size: 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: overlay;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(28, 23, 20, 0.4) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .drop-cap::first-letter {
+            font-family: var(--font-display);
+            font-size: 72px;
+            float: left;
+            line-height: 0.8;
+            margin-right: 16px;
+            color: var(--color-accent);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 12px;
+            padding: 16px 32px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            transition: all 300ms ease-out;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4), -1px -1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(180deg, #D4B872 0%, #C9A962 50%, #B8953F 100%);
+            color: var(--color-background);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 4px 12px rgba(201, 169, 98, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-accent-secondary);
+            border-color: var(--color-accent-secondary);
+            color: var(--color-foreground);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: none;
+            color: var(--color-accent);
+            padding: 8px 0;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .btn-ghost:hover {
+            color: #D4B872;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 48px;
+            position: relative;
+            transition: all 300ms ease-out;
+        }
+
+        .card:hover {
+            border-color: rgba(201, 169, 98, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .corner-flourish::before,
+        .corner-flourish::after {
+            content: "";
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--color-accent);
+            opacity: 0.6;
+            transition: opacity 300ms ease-out;
+        }
+
+        .corner-flourish:hover::before,
+        .corner-flourish:hover::after {
+            opacity: 1;
+        }
+
+        .corner-flourish::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-flourish::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .large-flourish::before,
+        .large-flourish::after {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Arch-top images */
+        .arch-top {
+            border-radius: 40% 40% 0 0 / 20% 20% 0 0;
+            overflow: hidden;
+        }
+
+        .arch-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(0.6) contrast(0.95) brightness(0.9);
+            transition: all 700ms ease-out;
+        }
+
+        .arch-top:hover img {
+            filter: sepia(0) contrast(1) brightness(1);
+            transform: scale(1.05);
+        }
+
+        /* Ornate divider */
+        .ornate-divider {
+            position: relative;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--color-border) 20%, var(--color-accent) 50%, var(--color-border) 80%, transparent 100%);
+            margin: 48px auto;
+            max-width: 600px;
+        }
+
+        .ornate-divider::before {
+            content: "✶";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--color-accent);
+            font-size: 12px;
+            background: var(--color-background);
+            padding: 0 12px;
+        }
+
+        /* Wax seal badge */
+        .wax-seal {
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #A63244, var(--color-accent-secondary), #6B1A26);
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-foreground);
+            font-size: 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(28, 23, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        nav .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: transform 300ms ease-out;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 10px;
+            color: var(--color-muted-foreground);
+            text-decoration: none;
+            transition: all 300ms ease-out;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+            letter-spacing: 0.25em;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--color-accent);
+            transition: all 300ms ease-out;
+        }
+
+        /* Stats bar */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            padding: 64px 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .stat-item {
+            text-align: center;
+            transition: all 300ms ease-out;
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .stat-item:hover {
+            background: rgba(37, 30, 25, 0.5);
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 48px;
+            color: var(--color-accent);
+            display: block;
+            transition: all 300ms ease-out;
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+        }
+
+        .stat-label {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 10px;
+            color: var(--color-muted-foreground);
+            margin-top: 8px;
+            transition: color 300ms ease-out;
+        }
+
+        .stat-item:hover .stat-label {
+            color: var(--color-accent);
+        }
+
+        /* Feature icons */
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 169, 98, 0.3);
+            background: var(--color-background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        /* Process timeline */
+        .process-step {
+            position: relative;
+            padding-left: 80px;
+        }
+
+        .process-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-family: var(--font-display);
+            font-size: 48px;
+            color: var(--color-accent);
+            opacity: 0.3;
+        }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--color-foreground);
+            font-family: var(--font-heading);
+            font-size: 24px;
+            padding: 32px 48px 32px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 300ms ease-out;
+            position: relative;
+        }
+
+        .faq-question:hover {
+            color: var(--color-accent);
+        }
+
+        .faq-question::after {
+            content: "›";
+            font-size: 32px;
+            color: var(--color-accent);
+            transform: rotate(90deg);
+            transition: transform 300ms ease-out;
+            position: absolute;
+            right: 0;
+        }
+
+        .faq-question.active::after {
+            transform: rotate(-90deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 500ms ease-out;
+            color: var(--color-muted-foreground);
+            font-size: 18px;
+        }
+
+        .faq-answer-content {
+            padding: 0 0 32px 0;
+        }
+
+        .faq-question.active + .faq-answer {
+            max-height: 500px;
+        }
+
+        /* Form */
+        input[type="email"] {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            color: var(--color-foreground);
+            font-family: var(--font-body);
+            height: 48px;
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 16px;
+            flex: 1;
+            transition: all 300ms ease-out;
+        }
+
+        input[type="email"]::placeholder {
+            color: var(--color-muted-foreground);
+            font-style: italic;
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 2px rgba(201, 169, 98, 0.3);
+        }
+
+        /* Pricing cards */
+        .pricing-card {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 48px;
+            position: relative;
+            transition: all 300ms ease-out;
+            height: 100%;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 1px var(--color-accent);
+        }
+
+        .pricing-card:hover {
+            border-color: rgba(201, 169, 98, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Label/overline style */
+        .label {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 10px;
+            color: var(--color-accent);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        /* Container utilities */
+        .container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-wide {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-narrow {
+            max-width: 896px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 96px 0;
+        }
+
+        /* Grid utilities */
+        .grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 700ms ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Design system badge */
+        .design-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(180deg, #D4B872 0%, #C9A962 50%, #B8953F 100%);
+            color: var(--color-background);
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 10px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 69px;
+                left: 0;
+                right: 0;
+                background: rgba(28, 23, 20, 0.98);
+                flex-direction: column;
+                padding: 32px;
+                gap: 24px;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 300ms ease-out;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 64px 0;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-content {
+                padding: 0 !important;
+            }
+
+            .large-flourish::before,
+            .large-flourish::after {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- Navigation -->
+        <nav>
+            <div class="container-wide">
+                <a href="#" class="logo">ACME</a>
+                <button class="hamburger" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#process">Process</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#cta" class="btn btn-primary">Get Started</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Hero -->
+        <section class="section" style="padding-top: 160px; padding-bottom: 96px;">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; position: relative;" class="large-flourish">
+                    <div class="hero-content" style="padding-right: 48px;">
+                        <span class="label">Est. 2024</span>
+                        <h1 style="font-size: 72px; margin-bottom: 32px; line-height: 1.1;">Build better. Ship faster.</h1>
+                        <p style="font-size: 20px; color: var(--color-muted-foreground); margin-bottom: 48px; line-height: 1.625;">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <a href="#cta" class="btn btn-primary">Start Project</a>
+                            <a href="#process" class="btn btn-secondary">Our Process</a>
+                        </div>
+                    </div>
+                    <div class="arch-top" style="aspect-ratio: 4/5; background: linear-gradient(135deg, var(--color-accent-secondary) 0%, var(--color-accent) 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="font-family: var(--font-display); font-size: 120px; color: rgba(232, 223, 212, 0.15); letter-spacing: 0.2em;">ACME</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section>
+            <div class="container">
+                <div class="stats-grid reveal">
+                    <div class="stat-item">
+                        <span class="stat-number">147+</span>
+                        <span class="stat-label">Projects Delivered</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Client Retention</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3.2x</span>
+                        <span class="stat-label">Avg. ROI Increase</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24h</span>
+                        <span class="stat-label">Response Time</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Detail / Proclamation -->
+        <section class="section" style="background: rgba(37, 30, 25, 0.3); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+            <div class="container-narrow">
+                <div style="text-align: center; position: relative; padding: 64px 48px; background: rgba(37, 30, 25, 0.5); border: 1px solid var(--color-border); border-radius: 4px;" class="corner-flourish reveal">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 24px; margin-bottom: 32px;">
+                        <div style="height: 1px; width: 80px; background: var(--color-accent);"></div>
+                        <span class="label" style="margin: 0;">Proclamation</span>
+                        <div style="height: 1px; width: 80px; background: var(--color-accent);"></div>
+                    </div>
+                    <h2 style="font-size: 48px; margin-bottom: 48px;">A Partnership Built on Excellence</h2>
+                    <div class="ornate-divider"></div>
+                    <div style="text-align: left;">
+                        <p class="drop-cap" style="font-size: 18px; color: var(--color-muted-foreground); margin-bottom: 24px;">We believe great digital products emerge from the confluence of rigorous strategy, thoughtful design, and engineering excellence. For over a century—metaphorically speaking—we have refined our craft, distilling the complexity of modern technology into elegant solutions that serve your users and advance your business.</p>
+                        <p style="font-size: 18px; color: var(--color-muted-foreground);">Our methodology is rooted in first principles. We do not chase trends; we build lasting value. Every engagement begins with deep understanding and concludes with measurable results. This is our commitment to you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features" class="section">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume I</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">Our Capabilities</h2>
+                    <p style="font-size: 20px; color: var(--color-muted-foreground); max-width: 700px; margin: 0 auto;">Six disciplines, unified under one roof. From conception to launch, we orchestrate every element of your digital success.</p>
+                </div>
+                <div class="grid grid-3">
+                    <div class="card corner-flourish reveal">
+                        <div class="feature-icon">St</div>
+                        <h3 style="font-size: 28px; margin-bottom: 16px; text-align: center;">Strategy</h3>
+                        <p style="color: var(--color-muted-foreground); text-align: center;">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div class="feature-icon">Ds</div>
+                        <h3 style="font-size: 28px; margin-bottom: 16px; text-align: center;">Design Systems</h3>
+                        <p style="color: var(--color-muted-foreground); text-align: center;">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div class="feature-icon">Ux</div>
+                        <h3 style="font-size: 28px; margin-bottom: 16px; text-align: center;">UX Research</h3>
+                        <p style="color: var(--color-muted-foreground); text-align: center;">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div class="feature-icon">Dv</div>
+                        <h3 style="font-size: 28px; margin-bottom: 16px; text-align: center;">Development</h3>
+                        <p style="color: var(--color-muted-foreground); text-align: center;">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div class="feature-icon">An</div>
+                        <h3 style="font-size: 28px; margin-bottom: 16px; text-align: center;">Analytics</h3>
+                        <p style="color: var(--color-muted-foreground); text-align: center;">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div class="feature-icon">Sc</div>
+                        <h3 style="font-size: 28px; margin-bottom: 16px; text-align: center;">Scale</h3>
+                        <p style="color: var(--color-muted-foreground); text-align: center;">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process -->
+        <section id="process" class="section" style="background: rgba(37, 30, 25, 0.3); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume II</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">The Method</h2>
+                    <p style="font-size: 20px; color: var(--color-muted-foreground); max-width: 700px; margin: 0 auto;">Our four-phase methodology transforms ambition into achievement. Proven across 147+ engagements.</p>
+                </div>
+                <div style="display: grid; gap: 64px; max-width: 800px; margin: 0 auto;">
+                    <div class="process-step reveal">
+                        <div class="process-number">I</div>
+                        <h3 style="font-size: 32px; margin-bottom: 16px;">Discovery</h3>
+                        <p style="color: var(--color-muted-foreground); font-size: 18px;">Deep dive into your business goals, user needs, and technical landscape.</p>
+                    </div>
+                    <div class="process-step reveal">
+                        <div class="process-number">II</div>
+                        <h3 style="font-size: 32px; margin-bottom: 16px;">Define</h3>
+                        <p style="color: var(--color-muted-foreground); font-size: 18px;">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                    </div>
+                    <div class="process-step reveal">
+                        <div class="process-number">III</div>
+                        <h3 style="font-size: 32px; margin-bottom: 16px;">Develop</h3>
+                        <p style="color: var(--color-muted-foreground); font-size: 18px;">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                    </div>
+                    <div class="process-step reveal">
+                        <div class="process-number">IV</div>
+                        <h3 style="font-size: 32px; margin-bottom: 16px;">Deliver</h3>
+                        <p style="color: var(--color-muted-foreground); font-size: 18px;">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits -->
+        <section class="section">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume III</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">The Advantage</h2>
+                    <p style="font-size: 20px; color: var(--color-muted-foreground); max-width: 700px; margin: 0 auto;">Why distinguished organizations choose to partner with us.</p>
+                </div>
+                <div style="display: grid; gap: 48px; max-width: 900px; margin: 0 auto;">
+                    <div class="reveal" style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start;">
+                        <div style="font-family: var(--font-display); font-size: 36px; color: var(--color-accent); opacity: 0.5; width: 60px;">I</div>
+                        <div>
+                            <h3 style="font-size: 28px; margin-bottom: 12px;">End-to-end ownership</h3>
+                            <p style="color: var(--color-muted-foreground); font-size: 18px;">One team from strategy through launch. No handoff gaps, no context loss.</p>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start;">
+                        <div style="font-family: var(--font-display); font-size: 36px; color: var(--color-accent); opacity: 0.5; width: 60px;">II</div>
+                        <div>
+                            <h3 style="font-size: 28px; margin-bottom: 12px;">Transparent pricing</h3>
+                            <p style="color: var(--color-muted-foreground); font-size: 18px;">Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start;">
+                        <div style="font-family: var(--font-display); font-size: 36px; color: var(--color-accent); opacity: 0.5; width: 60px;">III</div>
+                        <div>
+                            <h3 style="font-size: 28px; margin-bottom: 12px;">Senior-only teams</h3>
+                            <p style="color: var(--color-muted-foreground); font-size: 18px;">Every member has 8+ years of experience. No juniors learning on your project.</p>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start;">
+                        <div style="font-family: var(--font-display); font-size: 36px; color: var(--color-accent); opacity: 0.5; width: 60px;">IV</div>
+                        <div>
+                            <h3 style="font-size: 28px; margin-bottom: 12px;">Production-grade code</h3>
+                            <p style="color: var(--color-muted-foreground); font-size: 18px;">Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start;">
+                        <div style="font-family: var(--font-display); font-size: 36px; color: var(--color-accent); opacity: 0.5; width: 60px;">V</div>
+                        <div>
+                            <h3 style="font-size: 28px; margin-bottom: 12px;">Async-first culture</h3>
+                            <p style="color: var(--color-muted-foreground); font-size: 18px;">Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="section" style="background: rgba(37, 30, 25, 0.3); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume IV</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">Client Testimonials</h2>
+                </div>
+                <div class="grid grid-3">
+                    <div class="card corner-flourish reveal">
+                        <div style="font-size: 48px; color: var(--color-accent); margin-bottom: 24px; opacity: 0.3;">"</div>
+                        <p style="font-size: 18px; font-style: italic; margin-bottom: 32px; color: var(--color-muted-foreground);">Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires.</p>
+                        <div style="border-top: 1px solid var(--color-border); padding-top: 24px;">
+                            <div style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 4px;">Sarah Chen</div>
+                            <div style="font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent);">CTO at Vertex</div>
+                        </div>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div style="font-size: 48px; color: var(--color-accent); margin-bottom: 24px; opacity: 0.3;">"</div>
+                        <p style="font-size: 18px; font-style: italic; margin-bottom: 32px; color: var(--color-muted-foreground);">The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment.</p>
+                        <div style="border-top: 1px solid var(--color-border); padding-top: 24px;">
+                            <div style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 4px;">Marcus Rivera</div>
+                            <div style="font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent);">VP Product at Helix</div>
+                        </div>
+                    </div>
+                    <div class="card corner-flourish reveal">
+                        <div style="font-size: 48px; color: var(--color-accent); margin-bottom: 24px; opacity: 0.3;">"</div>
+                        <p style="font-size: 18px; font-style: italic; margin-bottom: 32px; color: var(--color-muted-foreground);">They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it.</p>
+                        <div style="border-top: 1px solid var(--color-border); padding-top: 24px;">
+                            <div style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 4px;">Aisha Kamau</div>
+                            <div style="font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent);">Founder at Prism</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog -->
+        <section id="blog" class="section">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume V</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">Recent Articles</h2>
+                </div>
+                <div class="grid grid-3">
+                    <article class="card corner-flourish reveal" style="padding: 0; overflow: hidden;">
+                        <div class="arch-top" style="aspect-ratio: 16/10; background: linear-gradient(135deg, var(--color-muted) 0%, var(--color-accent) 100%);">
+                        </div>
+                        <div style="padding: 32px;">
+                            <div style="display: flex; gap: 16px; margin-bottom: 16px; font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent);">
+                                <span>Design</span>
+                                <span style="color: var(--color-border);">•</span>
+                                <span>MAR 2024</span>
+                            </div>
+                            <h3 style="font-size: 24px; margin-bottom: 16px;">Design Systems at Scale: Lessons from 50 Projects</h3>
+                        </div>
+                    </article>
+                    <article class="card corner-flourish reveal" style="padding: 0; overflow: hidden;">
+                        <div class="arch-top" style="aspect-ratio: 16/10; background: linear-gradient(135deg, var(--color-background) 0%, var(--color-muted) 100%);">
+                        </div>
+                        <div style="padding: 32px;">
+                            <div style="display: flex; gap: 16px; margin-bottom: 16px; font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent);">
+                                <span>Engineering</span>
+                                <span style="color: var(--color-border);">•</span>
+                                <span>FEB 2024</span>
+                            </div>
+                            <h3 style="font-size: 24px; margin-bottom: 16px;">The Case for Boring Technology in 2024</h3>
+                        </div>
+                    </article>
+                    <article class="card corner-flourish reveal" style="padding: 0; overflow: hidden;">
+                        <div class="arch-top" style="aspect-ratio: 16/10; background: linear-gradient(135deg, var(--color-accent-secondary) 0%, var(--color-accent) 100%);">
+                        </div>
+                        <div style="padding: 32px;">
+                            <div style="display: flex; gap: 16px; margin-bottom: 16px; font-family: var(--font-display); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent);">
+                                <span>Strategy</span>
+                                <span style="color: var(--color-border);">•</span>
+                                <span>JAN 2024</span>
+                            </div>
+                            <h3 style="font-size: 24px; margin-bottom: 16px;">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="section" style="background: rgba(37, 30, 25, 0.3); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume VI</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">Investment Tiers</h2>
+                    <p style="font-size: 20px; color: var(--color-muted-foreground); max-width: 700px; margin: 0 auto;">Transparent, fixed-scope engagements designed for predictable budgeting.</p>
+                </div>
+                <div class="grid grid-3">
+                    <div class="pricing-card reveal">
+                        <div class="label">Starter</div>
+                        <div style="margin-bottom: 32px;">
+                            <span style="font-family: var(--font-heading); font-size: 48px; color: var(--color-accent);">$4,900</span>
+                            <span style="color: var(--color-muted-foreground);">/mo</span>
+                        </div>
+                        <ul style="list-style: none; margin-bottom: 32px;">
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">1 active project</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">2 revision rounds</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">48h response time</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">Weekly reports</li>
+                            <li style="padding: 12px 0; color: var(--color-muted-foreground);">Slack access</li>
+                        </ul>
+                        <a href="#cta" class="btn btn-secondary" style="width: 100%;">Select Plan</a>
+                    </div>
+                    <div class="pricing-card featured reveal" style="transform: scale(1.05);">
+                        <div class="wax-seal">★</div>
+                        <div class="label">Professional</div>
+                        <div style="margin-bottom: 32px;">
+                            <span style="font-family: var(--font-heading); font-size: 48px; color: var(--color-accent);">$9,900</span>
+                            <span style="color: var(--color-muted-foreground);">/mo</span>
+                        </div>
+                        <ul style="list-style: none; margin-bottom: 32px;">
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">3 active projects</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">Unlimited revisions</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">24h response time</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">Daily standups</li>
+                            <li style="padding: 12px 0; color: var(--color-muted-foreground);">Dedicated lead</li>
+                        </ul>
+                        <a href="#cta" class="btn btn-primary" style="width: 100%;">Select Plan</a>
+                    </div>
+                    <div class="pricing-card reveal">
+                        <div class="label">Enterprise</div>
+                        <div style="margin-bottom: 32px;">
+                            <span style="font-family: var(--font-heading); font-size: 48px; color: var(--color-accent);">Custom</span>
+                        </div>
+                        <ul style="list-style: none; margin-bottom: 32px;">
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">Unlimited projects</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">Unlimited revisions</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">Dedicated team</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--color-border); color: var(--color-muted-foreground);">On-site workshops</li>
+                            <li style="padding: 12px 0; color: var(--color-muted-foreground);">SLA guarantee</li>
+                        </ul>
+                        <a href="#cta" class="btn btn-secondary" style="width: 100%;">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <div class="container-narrow">
+                <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+                    <span class="label">Volume VII</span>
+                    <h2 style="font-size: 56px; margin-bottom: 24px;">Frequently Asked Questions</h2>
+                </div>
+                <div style="border-top: 1px solid var(--color-border);">
+                    <div class="faq-item reveal">
+                        <button class="faq-question">How long does a typical project take?</button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">Most projects run 8–16 weeks depending on scope.</div>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question">What technologies do you work with?</button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</div>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question">Can you work with our existing team?</button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">Absolutely. We embed seamlessly into existing workflows.</div>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question">What does your pricing include?</button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">Everything: strategy, design, development, QA, and deployment.</div>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question">Do you offer ongoing support?</button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">Yes. After launch, we offer retainer-based support packages.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section id="cta" class="section" style="background: rgba(37, 30, 25, 0.3); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+            <div class="container-narrow">
+                <div style="text-align: center; padding: 64px 48px; background: rgba(37, 30, 25, 0.5); border: 1px solid var(--color-border); border-radius: 4px; position: relative;" class="corner-flourish reveal">
+                    <h2 style="font-size: 48px; margin-bottom: 24px;">Ready to build something great?</h2>
+                    <p style="font-size: 20px; color: var(--color-muted-foreground); margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto;">Share your vision with us. We'll respond within 24 hours with a thoughtful assessment and proposed approach.</p>
+                    <form style="display: flex; gap: 16px; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+                        <input type="email" placeholder="your.email@company.com" required style="min-width: 250px;">
+                        <button type="submit" class="btn btn-primary">Let's Talk →</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="border-top: 1px solid var(--color-border); padding: 96px 0 32px;">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 64px;">
+                    <div>
+                        <div class="logo" style="display: block; margin-bottom: 24px;">ACME</div>
+                        <p style="color: var(--color-muted-foreground); max-width: 300px;">Building distinguished digital products for ambitious organizations since 2024.</p>
+                    </div>
+                    <div>
+                        <h4 style="font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px; color: var(--color-accent); margin-bottom: 24px;">Product</h4>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
+                            <li><a href="#features" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Features</a></li>
+                            <li><a href="#pricing" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Pricing</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Case Studies</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px; color: var(--color-accent); margin-bottom: 24px;">Company</h4>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">About</a></li>
+                            <li><a href="#blog" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Blog</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Careers</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px; color: var(--color-accent); margin-bottom: 24px;">Connect</h4>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Twitter/X</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">LinkedIn</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">GitHub</a></li>
+                            <li><a href="#" style="color: var(--color-muted-foreground); text-decoration: none; transition: color 300ms ease-out;">Dribbble</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid var(--color-border); padding-top: 32px; text-align: center;">
+                    <p style="font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px; color: var(--color-muted-foreground);">© 2024 ACME INC.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Design System Badge -->
+        <div class="design-badge">Academia</div>
+    </div>
+
+    <script>
+        // Hamburger menu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                question.classList.toggle('active');
+            });
+        });
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Footer link hover effects
+        document.querySelectorAll('footer a').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.color = 'var(--color-accent)';
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.color = 'var(--color-muted-foreground)';
+            });
+        });
+    </script>
+</body>
+</html>

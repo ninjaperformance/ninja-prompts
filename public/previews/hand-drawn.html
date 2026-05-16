@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME INC. - Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background: #fdfbf7;
+            color: #2d2d2d;
+            font-size: 18px;
+            line-height: 1.6;
+            background-image: radial-gradient(#e5e0d8 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-narrow {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 24px 0;
+            background: #fdfbf7;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px dashed #e5e0d8;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-family: 'Kalam', cursive;
+            font-size: 32px;
+            font-weight: 700;
+            color: #2d2d2d;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 32px;
+            list-style: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-links a {
+            color: #2d2d2d;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff4d4d;
+        }
+
+        .nav-links a:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ff4d4d;
+            border-radius: 50%;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 20px;
+            text-decoration: none;
+            border: 3px solid #2d2d2d;
+            background: #ffffff;
+            color: #2d2d2d;
+            cursor: pointer;
+            transition: all 0.1s;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 4px 4px 0px 0px #2d2d2d;
+        }
+
+        .btn:hover {
+            background: #ff4d4d;
+            color: #ffffff;
+            box-shadow: 2px 2px 0px 0px #2d2d2d;
+            transform: translate(2px, 2px);
+        }
+
+        .btn:active {
+            box-shadow: none;
+            transform: translate(4px, 4px);
+        }
+
+        .btn-secondary {
+            background: #e5e0d8;
+        }
+
+        .btn-secondary:hover {
+            background: #2d5da1;
+            color: #ffffff;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 80px 0;
+        }
+
+        .hero-grid {
+            display: grid;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .label {
+            display: inline-block;
+            padding: 4px 16px;
+            background: #fff9c4;
+            border: 2px solid #2d2d2d;
+            border-radius: 50px 20px 50px 20px / 20px 50px 20px 50px;
+            font-size: 16px;
+            margin-bottom: 24px;
+            transform: rotate(-2deg);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 72px;
+            }
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 32px;
+            color: #2d2d2d;
+        }
+
+        @media (min-width: 768px) {
+            .hero p {
+                font-size: 24px;
+            }
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            background: #e5e0d8;
+            border: 3px solid #2d2d2d;
+            border-radius: 225px 15px 255px 15px / 15px 255px 15px 225px;
+            padding: 80px 40px;
+            text-align: center;
+            font-family: 'Kalam', cursive;
+            font-size: 48px;
+            box-shadow: 6px 6px 0px 0px #2d2d2d;
+            position: relative;
+            transform: rotate(2deg);
+        }
+
+        .hero-arrow {
+            position: absolute;
+            bottom: -60px;
+            right: 40px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .hero-arrow {
+                display: block;
+            }
+        }
+
+        /* Stats */
+        .stats {
+            padding: 80px 0;
+            border-top: 2px dashed #e5e0d8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 2px solid #2d2d2d;
+            padding: 24px;
+            text-align: center;
+            border-radius: 180px 15px 200px 15px / 15px 200px 15px 180px;
+            box-shadow: 3px 3px 0px 0px rgba(45, 45, 45, 0.1);
+            transform: rotate(-1deg);
+        }
+
+        .stat-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .stat-card:hover {
+            transform: rotate(-2deg) scale(1.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:nth-child(even):hover {
+            transform: rotate(2deg) scale(1.05);
+        }
+
+        .stat-value {
+            font-family: 'Kalam', cursive;
+            font-size: 36px;
+            color: #ff4d4d;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 64px;
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background: #fff9c4;
+            border: 3px solid #2d2d2d;
+            padding: 32px;
+            border-radius: 200px 15px 220px 15px / 15px 220px 15px 200px;
+            box-shadow: 4px 4px 0px 0px rgba(45, 45, 45, 0.2);
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .feature-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .feature-card:hover {
+            transform: rotate(2deg);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:nth-child(even):hover {
+            transform: rotate(-2deg);
+        }
+
+        .tape {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 80px;
+            height: 24px;
+            background: rgba(200, 200, 200, 0.3);
+            border-left: 1px dashed rgba(45, 45, 45, 0.2);
+            border-right: 1px dashed rgba(45, 45, 45, 0.2);
+        }
+
+        .feature-icon {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Kalam', cursive;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 18px;
+        }
+
+        /* Process */
+        .process {
+            padding: 80px 0;
+            background: #ffffff;
+            border-top: 2px dashed #2d2d2d;
+            border-bottom: 2px dashed #2d2d2d;
+            position: relative;
+        }
+
+        .process-grid {
+            display: grid;
+            gap: 48px;
+        }
+
+        @media (min-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .process-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: #ff4d4d;
+            border: 3px solid #2d2d2d;
+            border-radius: 50%;
+            font-family: 'Kalam', cursive;
+            font-size: 36px;
+            color: #ffffff;
+            margin-bottom: 16px;
+            box-shadow: 4px 4px 0px 0px #2d2d2d;
+            position: relative;
+            z-index: 10;
+        }
+
+        .process-step h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .process-step p {
+            font-size: 18px;
+        }
+
+        /* Benefits */
+        .benefits {
+            padding: 80px 0;
+        }
+
+        .benefits-list {
+            display: grid;
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            padding: 24px;
+            border-radius: 200px 15px 220px 15px / 15px 220px 15px 200px;
+            box-shadow: 3px 3px 0px 0px rgba(45, 45, 45, 0.1);
+            transform: rotate(-1deg);
+        }
+
+        .benefit-item:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .benefit-item h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .benefit-item p {
+            font-size: 18px;
+        }
+
+        /* Blog */
+        .blog {
+            padding: 80px 0;
+            background: #e5e0d8;
+        }
+
+        .blog-grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            border-radius: 180px 15px 200px 15px / 15px 200px 15px 180px;
+            overflow: hidden;
+            box-shadow: 4px 4px 0px 0px #2d2d2d;
+            transform: rotate(-1deg);
+            transition: all 0.2s;
+        }
+
+        .blog-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .blog-card:hover {
+            box-shadow: 8px 8px 0px 0px #2d2d2d;
+            transform: rotate(-2deg) translateY(-4px);
+        }
+
+        .blog-card:nth-child(even):hover {
+            transform: rotate(2deg) translateY(-4px);
+        }
+
+        .blog-image {
+            background: #fff9c4;
+            border-bottom: 3px solid #2d2d2d;
+            padding: 60px 20px;
+            text-align: center;
+            font-size: 48px;
+        }
+
+        .blog-content {
+            padding: 24px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .blog-category {
+            background: #ff4d4d;
+            color: #ffffff;
+            padding: 2px 12px;
+            border-radius: 20px 5px 20px 5px / 5px 20px 5px 20px;
+        }
+
+        .blog-card h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .testimonial-card {
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            padding: 32px;
+            border-radius: 200px 15px 220px 15px / 15px 220px 15px 200px;
+            box-shadow: 4px 4px 0px 0px rgba(45, 45, 45, 0.2);
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .testimonial-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .testimonial-card::before {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 40px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #2d2d2d;
+        }
+
+        .testimonial-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 42px;
+            width: 0;
+            height: 0;
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-top: 13px solid #ffffff;
+        }
+
+        .testimonial-text {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-author {
+            font-family: 'Kalam', cursive;
+            font-size: 18px;
+        }
+
+        .testimonial-title {
+            font-size: 16px;
+            color: #2d5da1;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 80px 0;
+            background: #fdfbf7;
+        }
+
+        .pricing-grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .pricing-card {
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            padding: 32px;
+            border-radius: 200px 15px 220px 15px / 15px 220px 15px 200px;
+            box-shadow: 4px 4px 0px 0px rgba(45, 45, 45, 0.2);
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .pricing-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .pricing-card.featured {
+            background: #fff9c4;
+            transform: scale(1) rotate(0deg);
+        }
+
+        @media (min-width: 768px) {
+            .pricing-card.featured {
+                transform: scale(1.05) rotate(0deg);
+            }
+        }
+
+        .pricing-card.featured::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px dashed #ff4d4d;
+            border-radius: 220px 25px 240px 25px / 25px 240px 25px 220px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-card.featured::before {
+                display: block;
+            }
+        }
+
+        .pricing-tier {
+            font-family: 'Kalam', cursive;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-family: 'Kalam', cursive;
+            font-size: 48px;
+            color: #ff4d4d;
+            margin-bottom: 24px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        .pricing-features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #e5e0d8;
+            font-size: 16px;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 80px 0;
+            background: #e5e0d8;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            margin-bottom: 16px;
+            border-radius: 150px 15px 170px 15px / 15px 170px 15px 150px;
+            overflow: hidden;
+            box-shadow: 3px 3px 0px 0px rgba(45, 45, 45, 0.1);
+        }
+
+        .faq-question {
+            padding: 24px;
+            cursor: pointer;
+            font-family: 'Kalam', cursive;
+            font-size: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question:hover {
+            background: #fff9c4;
+        }
+
+        .faq-icon {
+            font-size: 28px;
+            transition: transform 0.2s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 24px;
+            font-size: 18px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 24px 24px 24px;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 80px 0;
+        }
+
+        .cta-content {
+            text-align: center;
+            background: #ffffff;
+            border: 3px solid #2d2d2d;
+            padding: 64px 32px;
+            border-radius: 220px 20px 240px 20px / 20px 240px 20px 220px;
+            box-shadow: 8px 8px 0px 0px #2d2d2d;
+            transform: rotate(-1deg);
+        }
+
+        .cta h2 {
+            font-size: 48px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .cta h2 {
+                font-size: 64px;
+            }
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 24px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 20px;
+            border: 3px solid #2d2d2d;
+            background: #ffffff;
+            border-radius: 150px 15px 170px 15px / 15px 170px 15px 150px;
+        }
+
+        .cta-input:focus {
+            outline: none;
+            border-color: #2d5da1;
+            box-shadow: 0 0 0 2px rgba(45, 93, 161, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #2d2d2d;
+            color: #fdfbf7;
+            padding: 64px 0 32px 0;
+            border-top: 3px dashed #fdfbf7;
+        }
+
+        .footer-grid {
+            display: grid;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-logo {
+            font-family: 'Kalam', cursive;
+            font-size: 48px;
+            color: #fdfbf7;
+        }
+
+        .footer-column h4 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ff4d4d;
+            border-radius: 50%;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #fdfbf7;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .footer-links a:hover {
+            color: #ff4d4d;
+            text-decoration: line-through;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 2px dashed #fdfbf7;
+            font-size: 16px;
+        }
+
+        /* Badge */
+        .design-badge {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #ff4d4d;
+            color: #ffffff;
+            padding: 12px 24px;
+            border: 3px solid #2d2d2d;
+            border-radius: 100px 10px 100px 10px / 10px 100px 10px 100px;
+            font-family: 'Kalam', cursive;
+            font-size: 18px;
+            box-shadow: 4px 4px 0px 0px #2d2d2d;
+            z-index: 1000;
+            transform: rotate(-3deg);
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .bounce {
+            animation: bounce 3s infinite;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <div class="nav-content">
+            <a href="#" class="logo">ACME</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <a href="#cta" class="btn">Get Started</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div>
+                <span class="label">Est. 2024</span>
+                <h1 class="reveal">Build better. Ship faster.</h1>
+                <p class="reveal">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                <div class="hero-cta reveal">
+                    <a href="#cta" class="btn">Start Project</a>
+                    <a href="#process" class="btn btn-secondary">Our Process</a>
+                </div>
+                <svg class="hero-arrow" width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 10 Q 40 30, 70 25 T 100 35" stroke="#2d2d2d" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                    <path d="M95 30 L 105 35 L 98 42" stroke="#2d2d2d" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+            <div class="hero-visual reveal">
+                ACME
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <span class="stat-value">147+</span>
+                <span class="stat-label">Projects Delivered</span>
+            </div>
+            <div class="stat-card reveal">
+                <span class="stat-value">98%</span>
+                <span class="stat-label">Client Retention</span>
+            </div>
+            <div class="stat-card reveal">
+                <span class="stat-value">3.2x</span>
+                <span class="stat-label">Avg. ROI Increase</span>
+            </div>
+            <div class="stat-card reveal">
+                <span class="stat-value">24h</span>
+                <span class="stat-label">Response Time</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="features">
+    <div class="container">
+        <h2 class="section-title reveal">What We Do</h2>
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <div class="tape"></div>
+                <div class="feature-icon">St</div>
+                <h3>Strategy</h3>
+                <p>Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="tape"></div>
+                <div class="feature-icon">Ds</div>
+                <h3>Design Systems</h3>
+                <p>Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="tape"></div>
+                <div class="feature-icon">Ux</div>
+                <h3>UX Research</h3>
+                <p>User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="tape"></div>
+                <div class="feature-icon">Dv</div>
+                <h3>Development</h3>
+                <p>Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="tape"></div>
+                <div class="feature-icon">An</div>
+                <h3>Analytics</h3>
+                <p>Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="tape"></div>
+                <div class="feature-icon">Sc</div>
+                <h3>Scale</h3>
+                <p>Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="process" class="process">
+    <div class="container">
+        <h2 class="section-title reveal">How It Works</h2>
+        <div class="process-grid">
+            <div class="process-step reveal">
+                <div class="step-number">1</div>
+                <h3>Discovery</h3>
+                <p>Deep dive into your business goals, user needs, and technical landscape.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="step-number">2</div>
+                <h3>Define</h3>
+                <p>Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="step-number">3</div>
+                <h3>Develop</h3>
+                <p>Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="step-number">4</div>
+                <h3>Deliver</h3>
+                <p>Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="benefits">
+    <div class="container">
+        <h2 class="section-title reveal">Why Choose Us</h2>
+        <div class="benefits-list">
+            <div class="benefit-item reveal">
+                <h3>End-to-end ownership</h3>
+                <p>One team from strategy through launch. No handoff gaps, no context loss.</p>
+            </div>
+            <div class="benefit-item reveal">
+                <h3>Transparent pricing</h3>
+                <p>Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+            </div>
+            <div class="benefit-item reveal">
+                <h3>Senior-only teams</h3>
+                <p>Every member has 8+ years of experience. No juniors learning on your project.</p>
+            </div>
+            <div class="benefit-item reveal">
+                <h3>Production-grade code</h3>
+                <p>Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+            </div>
+            <div class="benefit-item reveal">
+                <h3>Async-first culture</h3>
+                <p>Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="blog" class="blog">
+    <div class="container">
+        <h2 class="section-title reveal">Latest Thinking</h2>
+        <div class="blog-grid">
+            <article class="blog-card reveal">
+                <div class="blog-image">📐</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">Design</span>
+                        <span>MAR 2024</span>
+                    </div>
+                    <h3>Design Systems at Scale: Lessons from 50 Projects</h3>
+                </div>
+            </article>
+            <article class="blog-card reveal">
+                <div class="blog-image">⚙️</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">Engineering</span>
+                        <span>FEB 2024</span>
+                    </div>
+                    <h3>The Case for Boring Technology in 2024</h3>
+                </div>
+            </article>
+            <article class="blog-card reveal">
+                <div class="blog-image">📊</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">Strategy</span>
+                        <span>JAN 2024</span>
+                    </div>
+                    <h3>Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <h2 class="section-title reveal">What Clients Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card reveal">
+                <p class="testimonial-text">"Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."</p>
+                <div class="testimonial-author">Sarah Chen</div>
+                <div class="testimonial-title">CTO at Vertex</div>
+            </div>
+            <div class="testimonial-card reveal">
+                <p class="testimonial-text">"The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."</p>
+                <div class="testimonial-author">Marcus Rivera</div>
+                <div class="testimonial-title">VP Product at Helix</div>
+            </div>
+            <div class="testimonial-card reveal">
+                <p class="testimonial-text">"They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."</p>
+                <div class="testimonial-author">Aisha Kamau</div>
+                <div class="testimonial-title">Founder at Prism</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="pricing" class="pricing">
+    <div class="container">
+        <h2 class="section-title reveal">Simple Pricing</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card reveal">
+                <h3 class="pricing-tier">Starter</h3>
+                <div class="pricing-price">$4,900/mo</div>
+                <ul class="pricing-features">
+                    <li>1 active project</li>
+                    <li>2 revision rounds</li>
+                    <li>48h response time</li>
+                    <li>Weekly reports</li>
+                    <li>Slack access</li>
+                </ul>
+                <a href="#cta" class="btn" style="width: 100%; text-align: center;">Get Started</a>
+            </div>
+            <div class="pricing-card featured reveal">
+                <h3 class="pricing-tier">Professional</h3>
+                <div class="pricing-price">$9,900/mo</div>
+                <ul class="pricing-features">
+                    <li>3 active projects</li>
+                    <li>Unlimited revisions</li>
+                    <li>24h response time</li>
+                    <li>Daily standups</li>
+                    <li>Dedicated lead</li>
+                </ul>
+                <a href="#cta" class="btn" style="width: 100%; text-align: center;">Get Started</a>
+            </div>
+            <div class="pricing-card reveal">
+                <h3 class="pricing-tier">Enterprise</h3>
+                <div class="pricing-price">Custom</div>
+                <ul class="pricing-features">
+                    <li>Unlimited projects</li>
+                    <li>Unlimited revisions</li>
+                    <li>Dedicated team</li>
+                    <li>On-site workshops</li>
+                    <li>SLA guarantee</li>
+                </ul>
+                <a href="#cta" class="btn" style="width: 100%; text-align: center;">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="faq">
+    <div class="container">
+        <h2 class="section-title reveal">Common Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item reveal">
+                <div class="faq-question">
+                    <span>How long does a typical project take?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Most projects run 8–16 weeks depending on scope.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question">
+                    <span>What technologies do you work with?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question">
+                    <span>Can you work with our existing team?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely. We embed seamlessly into existing workflows.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question">
+                    <span>What does your pricing include?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Everything: strategy, design, development, QA, and deployment.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question">
+                    <span>Do you offer ongoing support?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes. After launch, we offer retainer-based support packages.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="cta" class="cta">
+    <div class="container-narrow">
+        <div class="cta-content reveal">
+            <h2>Ready to build something great?</h2>
+            <form class="cta-form">
+                <input type="email" class="cta-input" placeholder="your.email@company.com">
+                <button type="submit" class="btn">Let's Talk →</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo">ACME</div>
+            </div>
+            <div class="footer-column">
+                <h4>Product</h4>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Changelog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Twitter/X</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Dribbble</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2024 ACME INC.
+        </div>
+    </div>
+</footer>
+
+<div class="design-badge">Hand Drawn</div>
+
+<script>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+        const item = question.parentElement;
+        const wasActive = item.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        
+        if (!wasActive) {
+            item.classList.add('active');
+        }
+    });
+});
+
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+});
+
+document.querySelectorAll('.reveal').forEach(el => {
+    revealObserver.observe(el);
+});
+
+// Form submission
+document.querySelector('.cta-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Thanks for your interest! We'll be in touch soon.');
+});
+</script>
+
+</body>
+</html>

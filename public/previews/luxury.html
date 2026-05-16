@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME — Luxury Design System Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-alabaster: #F9F8F6;
+            --fg-charcoal: #1A1A1A;
+            --bg-taupe: #EBE5DE;
+            --fg-warm-grey: #6C6863;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-alabaster);
+            color: var(--fg-charcoal);
+            line-height: 1.625;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Paper Noise Texture Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* Visible Grid Lines */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            max-width: 1600px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        .grid-line {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background-color: rgba(26, 26, 26, 0.2);
+        }
+
+        .grid-line:nth-child(1) { left: 4rem; }
+        .grid-line:nth-child(2) { left: 33.333%; }
+        .grid-line:nth-child(3) { right: 33.333%; }
+        .grid-line:nth-child(4) { right: 4rem; }
+
+        @media (max-width: 768px) {
+            .grid-lines { display: none; }
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .playfair { font-family: 'Playfair Display', serif; }
+        .inter { font-family: 'Inter', sans-serif; }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .container { padding: 0 4rem; }
+        }
+
+        .section-padding {
+            padding: 5rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .section-padding { padding: 8rem 0; }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            padding: 0 2.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 500ms ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background-color: var(--fg-charcoal);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+        .btn-primary .btn-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-gold);
+            transform: translateX(-100%);
+            transition: transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1;
+        }
+
+        .btn-primary:hover .btn-overlay {
+            transform: translateX(0);
+        }
+
+        .btn-primary .btn-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--fg-charcoal);
+            border: 1px solid var(--fg-charcoal);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--fg-charcoal);
+            color: var(--white);
+        }
+
+        .btn-link {
+            background: none;
+            color: var(--fg-charcoal);
+            padding: 0;
+            height: auto;
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            transition: text-decoration-color 500ms ease-out;
+        }
+
+        .btn-link:hover {
+            text-decoration-color: var(--accent-gold);
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-alabaster);
+            border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+            padding: 1.5rem 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: var(--fg-charcoal);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        @media (min-width: 1024px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-links a {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--fg-charcoal);
+            text-decoration: none;
+            transition: color 500ms ease-out;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 4rem;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--fg-warm-grey);
+            margin-bottom: 2rem;
+        }
+
+        .hero-label::before {
+            content: '';
+            display: block;
+            width: 2rem;
+            height: 1px;
+            background-color: var(--fg-charcoal);
+        }
+
+        @media (min-width: 768px) {
+            .hero-label::before { width: 3rem; }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 6rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .hero h1 { font-size: 8rem; }
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            line-height: 1.625;
+            color: var(--fg-warm-grey);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            height: 70vh;
+            background: linear-gradient(135deg, var(--bg-taupe) 0%, var(--bg-alabaster) 100%);
+            display: none;
+            filter: grayscale(1);
+            transition: filter 2000ms ease-out;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.06);
+        }
+
+        @media (min-width: 1024px) {
+            .hero-visual { display: block; }
+        }
+
+        .hero-visual:hover {
+            filter: grayscale(0);
+        }
+
+        .hero-visual::after {
+            content: 'ACME';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            color: var(--fg-charcoal);
+            opacity: 0.1;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            padding: 4rem 0;
+            border-top: 1px solid rgba(26, 26, 26, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(4, 1fr);
+                padding: 6rem 0;
+            }
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .stat-value { font-size: 3rem; }
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--fg-warm-grey);
+            line-height: 1.4;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4rem;
+            }
+        }
+
+        .feature-card {
+            border-top: 1px solid var(--fg-charcoal);
+            padding-top: 2rem;
+            transition: background-color 500ms ease-out;
+        }
+
+        .feature-card:hover {
+            background-color: rgba(249, 248, 246, 0.5);
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            border: 1px solid var(--fg-charcoal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            transition: border-color 500ms ease-out;
+        }
+
+        .feature-card:hover .feature-icon {
+            border-color: var(--accent-gold);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9375rem;
+            color: var(--fg-warm-grey);
+            line-height: 1.625;
+        }
+
+        /* Process Section */
+        .dark-section {
+            background-color: var(--fg-charcoal);
+            color: var(--bg-alabaster);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .process-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .process-step {
+            border-top: 1px solid rgba(249, 248, 246, 0.2);
+            padding-top: 2rem;
+        }
+
+        .process-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .process-step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--bg-alabaster);
+        }
+
+        .process-step p {
+            font-size: 0.9375rem;
+            color: rgba(249, 248, 246, 0.7);
+            line-height: 1.625;
+        }
+
+        /* Benefits Section */
+        .benefits-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+        }
+
+        .benefit-item {
+            border-top: 1px solid rgba(26, 26, 26, 0.1);
+            padding: 2rem 0;
+        }
+
+        .benefit-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .benefit-item p {
+            font-size: 0.9375rem;
+            color: var(--fg-warm-grey);
+            line-height: 1.625;
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4rem;
+            }
+        }
+
+        .blog-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 500ms ease-out;
+            cursor: pointer;
+            group: blog-card;
+        }
+
+        .blog-image {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            background: linear-gradient(135deg, var(--bg-taupe) 0%, var(--bg-alabaster) 100%);
+            margin-bottom: 1.5rem;
+            filter: grayscale(1);
+            transition: filter 1500ms ease-out, transform 1500ms ease-out, box-shadow 500ms ease-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        .blog-card:hover .blog-image {
+            filter: grayscale(0);
+            transform: scale(1.05);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--fg-warm-grey);
+            margin-bottom: 1rem;
+        }
+
+        .blog-meta::before {
+            content: '';
+            display: block;
+            width: 2rem;
+            height: 1px;
+            background-color: var(--fg-charcoal);
+        }
+
+        .blog-card h3 {
+            font-size: 1.5rem;
+            line-height: 1.3;
+            transition: color 500ms ease-out;
+        }
+
+        .blog-card:hover h3 {
+            color: var(--accent-gold);
+        }
+
+        /* Testimonials Section */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3rem;
+            }
+        }
+
+        .testimonial-card {
+            border-left: 2px solid rgba(26, 26, 26, 0.2);
+            padding-left: 1.5rem;
+            transition: all 700ms ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-card { padding-left: 2rem; }
+        }
+
+        .testimonial-card:hover {
+            border-left-color: var(--accent-gold);
+            padding-left: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-card:hover { padding-left: 2.5rem; }
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .star {
+            width: 1rem;
+            height: 1rem;
+            transition: transform 500ms ease-out;
+        }
+
+        .testimonial-card:hover .star {
+            transform: scale(1.1);
+        }
+
+        .testimonial-card blockquote {
+            font-size: 1rem;
+            line-height: 1.625;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--bg-taupe) 0%, var(--fg-warm-grey) 100%);
+            filter: grayscale(1);
+            transition: filter 1500ms ease-out;
+        }
+
+        .testimonial-card:hover .author-avatar {
+            filter: grayscale(0);
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .author-name {
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: color 500ms ease-out;
+        }
+
+        .testimonial-card:hover .author-name {
+            color: var(--accent-gold);
+        }
+
+        .author-title {
+            font-size: 0.8125rem;
+            color: var(--fg-warm-grey);
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        .pricing-card {
+            border-top: 1px solid rgba(26, 26, 26, 0.2);
+            padding: 3rem 2rem;
+            transition: background-color 500ms ease-out;
+        }
+
+        .pricing-card:hover {
+            background-color: rgba(249, 248, 246, 0.5);
+        }
+
+        .pricing-card.featured {
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        .pricing-tier {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--fg-warm-grey);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-card.featured .pricing-tier {
+            color: var(--accent-gold);
+        }
+
+        .pricing-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            font-size: 0.875rem;
+            color: var(--fg-warm-grey);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            font-size: 0.9375rem;
+            line-height: 1.625;
+            padding: 0.75rem 0;
+            border-top: 1px solid rgba(26, 26, 26, 0.05);
+        }
+
+        /* FAQ Section */
+        .faq-list {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-top: 1px solid rgba(26, 26, 26, 0.1);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--fg-charcoal);
+            transition: color 500ms ease-out;
+        }
+
+        .faq-question:hover {
+            color: var(--accent-gold);
+        }
+
+        .faq-icon {
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid var(--fg-charcoal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 500ms ease-out;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(90deg);
+            border-color: var(--accent-gold);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 500ms ease-out, opacity 500ms ease-out;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+            padding-bottom: 2rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.9375rem;
+            line-height: 1.625;
+            color: var(--fg-warm-grey);
+        }
+
+        /* Final CTA Section */
+        .final-cta {
+            text-align: center;
+            padding: 8rem 0;
+        }
+
+        .final-cta h2 {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .final-cta h2 { font-size: 4.5rem; }
+        }
+
+        .cta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .cta-form {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .cta-input {
+            flex: 1;
+            height: 48px;
+            padding: 0.5rem 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--fg-charcoal);
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.875rem;
+            color: var(--fg-charcoal);
+            outline: none;
+            transition: border-color 500ms ease-out;
+        }
+
+        .cta-input::placeholder {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--fg-warm-grey);
+        }
+
+        .cta-input:focus {
+            border-bottom-color: var(--accent-gold);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--fg-charcoal);
+            color: var(--bg-alabaster);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+                gap: 4rem;
+            }
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: rgba(249, 248, 246, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(249, 248, 246, 0.8);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            transition: color 500ms ease-out;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(249, 248, 246, 0.1);
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(249, 248, 246, 0.6);
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .section-header { margin-bottom: 6rem; }
+        }
+
+        .section-label {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--fg-warm-grey);
+            margin-bottom: 1rem;
+        }
+
+        .dark-section .section-label {
+            color: rgba(249, 248, 246, 0.6);
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            line-height: 1.1;
+        }
+
+        @media (min-width: 768px) {
+            .section-header h2 { font-size: 4rem; }
+        }
+
+        .section-header.centered {
+            text-align: center;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Drop Cap */
+        .drop-cap::first-letter {
+            float: left;
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            line-height: 0.8;
+            margin-right: 0.75rem;
+            color: var(--fg-charcoal);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 1000ms ease-out forwards;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1000ms ease-out, transform 1000ms ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Design System Badge */
+        .design-badge {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--fg-charcoal);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-lines">
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+    </div>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="nav-logo">ACME</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <button class="btn btn-primary">
+                <span class="btn-overlay"></span>
+                <span class="btn-content">Get Started</span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content reveal">
+                <div class="hero-label">
+                    Est. 2024
+                </div>
+                <h1>Build better.<br>Ship faster.</h1>
+                <p class="hero-subtext">
+                    We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary">
+                        <span class="btn-overlay"></span>
+                        <span class="btn-content">Start Project</span>
+                    </button>
+                    <button class="btn btn-secondary">Our Process</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual"></div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stat-item reveal">
+                <div class="stat-value">147+</div>
+                <div class="stat-label">Projects Delivered</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Client Retention</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-value">3.2x</div>
+                <div class="stat-label">Avg. ROI Increase</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-value">24h</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section-padding">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Capabilities</div>
+                <h2>End-to-end <em style="font-style: italic; color: var(--accent-gold);">Excellence</em></h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">St</div>
+                    <h3>Strategy</h3>
+                    <p>Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Ds</div>
+                    <h3>Design Systems</h3>
+                    <p>Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Ux</div>
+                    <h3>UX Research</h3>
+                    <p>User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Dv</div>
+                    <h3>Development</h3>
+                    <p>Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">An</div>
+                    <h3>Analytics</h3>
+                    <p>Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Sc</div>
+                    <h3>Scale</h3>
+                    <p>Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="section-padding dark-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">How We Work</div>
+                <h2>The <em style="font-style: italic; color: var(--accent-gold);">Process</em></h2>
+            </div>
+            <div class="process-grid">
+                <div class="process-step reveal">
+                    <div class="process-number">1</div>
+                    <h3>Discovery</h3>
+                    <p>Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-number">2</div>
+                    <h3>Define</h3>
+                    <p>Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-number">3</div>
+                    <h3>Develop</h3>
+                    <p>Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-number">4</div>
+                    <h3>Deliver</h3>
+                    <p>Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Why Choose ACME</div>
+                <h2>Built for <em style="font-style: italic; color: var(--accent-gold);">Impact</em></h2>
+            </div>
+            <div class="benefits-list">
+                <div class="benefit-item reveal">
+                    <h3>End-to-end ownership</h3>
+                    <p>One team from strategy through launch. No handoff gaps, no context loss.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Transparent pricing</h3>
+                    <p>Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Senior-only teams</h3>
+                    <p>Every member has 8+ years of experience. No juniors learning on your project.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Production-grade code</h3>
+                    <p>Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Async-first culture</h3>
+                    <p>Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="section-padding" style="background-color: var(--bg-taupe);">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Insights</div>
+                <h2>Latest <em style="font-style: italic; color: var(--accent-gold);">Thinking</em></h2>
+            </div>
+            <div class="blog-grid">
+                <a href="#" class="blog-card reveal">
+                    <div class="blog-image"></div>
+                    <div class="blog-meta">
+                        <span>Design</span>
+                        <span>MAR 2024</span>
+                    </div>
+                    <h3>Design Systems at Scale: Lessons from 50 Projects</h3>
+                </a>
+                <a href="#" class="blog-card reveal">
+                    <div class="blog-image"></div>
+                    <div class="blog-meta">
+                        <span>Engineering</span>
+                        <span>FEB 2024</span>
+                    </div>
+                    <h3>The Case for Boring Technology in 2024</h3>
+                </a>
+                <a href="#" class="blog-card reveal">
+                    <div class="blog-image"></div>
+                    <div class="blog-meta">
+                        <span>Strategy</span>
+                        <span>JAN 2024</span>
+                    </div>
+                    <h3>Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header centered reveal">
+                <div class="section-label">Client Stories</div>
+                <h2>What <em style="font-style: italic; color: var(--accent-gold);">Partners</em> Say</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-stars">
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <blockquote>
+                        "Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."
+                    </blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Chen</div>
+                            <div class="author-title">CTO at Vertex</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-stars">
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <blockquote>
+                        "The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."
+                    </blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <div class="author-name">Marcus Rivera</div>
+                            <div class="author-title">VP Product at Helix</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-stars">
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <svg class="star" viewBox="0 0 24 24" fill="var(--accent-gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <blockquote>
+                        "They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."
+                    </blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <div class="author-name">Aisha Kamau</div>
+                            <div class="author-title">Founder at Prism</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="section-padding dark-section">
+        <div class="container">
+            <div class="section-header centered reveal">
+                <div class="section-label">Investment</div>
+                <h2>Transparent <em style="font-style: italic; color: var(--accent-gold);">Pricing</em></h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card reveal">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-amount">$4,900</div>
+                    <div class="pricing-period">/month</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%;">Get Started</button>
+                </div>
+                <div class="pricing-card featured reveal">
+                    <div class="pricing-tier">Professional</div>
+                    <div class="pricing-amount">$9,900</div>
+                    <div class="pricing-period">/month</div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%;">
+                        <span class="btn-overlay"></span>
+                        <span class="btn-content">Get Started</span>
+                    </button>
+                </div>
+                <div class="pricing-card reveal">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-amount">Custom</div>
+                    <div class="pricing-period">Contact us</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%;">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <div class="section-header centered reveal">
+                <div class="section-label">Questions</div>
+                <h2>Common <em style="font-style: italic; color: var(--accent-gold);">Inquiries</em></h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>How long does a typical project take?</span>
+                        <div class="faq-icon">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="6" y1="0" x2="6" y2="12"/>
+                                <line x1="0" y1="6" x2="12" y2="6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Most projects run 8–16 weeks depending on scope.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>What technologies do you work with?</span>
+                        <div class="faq-icon">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="6" y1="0" x2="6" y2="12"/>
+                                <line x1="0" y1="6" x2="12" y2="6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>Can you work with our existing team?</span>
+                        <div class="faq-icon">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="6" y1="0" x2="6" y2="12"/>
+                                <line x1="0" y1="6" x2="12" y2="6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely. We embed seamlessly into existing workflows.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>What does your pricing include?</span>
+                        <div class="faq-icon">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="6" y1="0" x2="6" y2="12"/>
+                                <line x1="0" y1="6" x2="12" y2="6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Everything: strategy, design, development, QA, and deployment.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>Do you offer ongoing support?</span>
+                        <div class="faq-icon">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="6" y1="0" x2="6" y2="12"/>
+                                <line x1="0" y1="6" x2="12" y2="6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. After launch, we offer retainer-based support packages.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2 class="reveal">Ready to build<br>something great?</h2>
+            <form class="cta-form reveal">
+                <input type="email" class="cta-input" placeholder="your@email.com" required>
+                <button type="submit" class="btn btn-primary">
+                    <span class="btn-overlay"></span>
+                    <span class="btn-content">Let's Talk →</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">ACME</div>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2024 ACME INC.
+            </div>
+        </div>
+    </footer>
+
+    <div class="design-badge">Luxury</div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('.cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your interest! We will be in touch soon.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>

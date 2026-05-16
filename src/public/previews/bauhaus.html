@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME - Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #F0F0F0;
+            color: #121212;
+            font-weight: 500;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: #F0F0F0;
+            border-bottom: 4px solid #121212;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-shapes {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .logo-circle {
+            width: 16px;
+            height: 16px;
+            background: #D02020;
+            border-radius: 9999px;
+            border: 2px solid #121212;
+        }
+
+        .logo-square {
+            width: 16px;
+            height: 16px;
+            background: #F0C020;
+            border: 2px solid #121212;
+        }
+
+        .logo-triangle {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 16px solid #1040C0;
+            position: relative;
+        }
+
+        .logo-triangle::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 12px solid #F0F0F0;
+            left: -6px;
+            top: 3px;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #121212;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease-out;
+        }
+
+        .nav-links a:hover {
+            color: #D02020;
+        }
+
+        .nav-cta {
+            background: #D02020;
+            color: white;
+            border: 2px solid #121212;
+            padding: 0.5rem 1.5rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            box-shadow: 4px 4px 0px 0px #121212;
+            transition: all 0.2s ease-out;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-cta:hover {
+            opacity: 0.9;
+        }
+
+        .nav-cta:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: 2px solid #121212;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: #121212;
+            margin: 4px 0;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Hero */
+        .hero {
+            border-bottom: 4px solid #121212;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        .hero-left {
+            padding: 3rem 1rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-label {
+            display: inline-block;
+            background: #121212;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-headline {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtext {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: 2px solid #121212;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: #D02020;
+            color: white;
+            box-shadow: 4px 4px 0px 0px #121212;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #121212;
+            box-shadow: 4px 4px 0px 0px #121212;
+        }
+
+        .btn-secondary:hover {
+            background: #E0E0E0;
+        }
+
+        .btn-secondary:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .hero-right {
+            background: #1040C0;
+            padding: 3rem 1rem;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-visual {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .hero-circle {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: #F0C020;
+            border: 4px solid #121212;
+            border-radius: 9999px;
+            top: 0;
+            left: 0;
+        }
+
+        .hero-square-rotated {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: #D02020;
+            border: 4px solid #121212;
+            transform: rotate(45deg);
+            top: 50px;
+            right: 0;
+        }
+
+        .hero-square-center {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: white;
+            border: 4px solid #121212;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-triangle {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 50px solid #121212;
+        }
+
+        @media (min-width: 768px) {
+            .hero-headline {
+                font-size: 4rem;
+            }
+            .hero-subtext {
+                font-size: 1.125rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .hero-left {
+                padding: 6rem 2rem;
+            }
+            .hero-right {
+                padding: 6rem 2rem;
+            }
+            .hero-headline {
+                font-size: 5rem;
+            }
+        }
+
+        /* Stats */
+        .stats {
+            background: #F0C020;
+            border-bottom: 4px solid #121212;
+            padding: 3rem 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            padding: 2rem;
+            border-bottom: 2px solid #121212;
+            text-align: center;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.875rem;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .stat-item:nth-child(2) {
+                border-bottom: 2px solid #121212;
+            }
+            .stat-item:nth-child(odd) {
+                border-right: 2px solid #121212;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .stat-item {
+                border-bottom: none;
+                border-right: 2px solid #121212;
+            }
+            .stat-item:last-child {
+                border-right: none;
+            }
+        }
+
+        /* Features */
+        .features {
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border: 4px solid #121212;
+            padding: 2rem;
+            box-shadow: 8px 8px 0px 0px #121212;
+            position: relative;
+            transition: transform 0.2s ease-out;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: white;
+            border: 2px solid #121212;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 4px 4px 0px 0px #121212;
+        }
+
+        .feature-card:nth-child(3n+1) .feature-icon {
+            background: #D02020;
+            color: white;
+        }
+
+        .feature-card:nth-child(3n+2) .feature-icon {
+            background: #1040C0;
+            color: white;
+        }
+
+        .feature-card:nth-child(3n+3) .feature-icon {
+            background: #F0C020;
+            color: #121212;
+        }
+
+        .feature-decorator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #121212;
+        }
+
+        .feature-card:nth-child(3n+1) .feature-decorator {
+            background: #D02020;
+            border-radius: 9999px;
+        }
+
+        .feature-card:nth-child(3n+2) .feature-decorator {
+            background: #1040C0;
+        }
+
+        .feature-card:nth-child(3n+3) .feature-decorator {
+            background: #F0C020;
+            transform: rotate(45deg);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            line-height: 1.6;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .section-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .section-title {
+                font-size: 4rem;
+            }
+        }
+
+        /* Process */
+        .process {
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .process-number {
+            width: 80px;
+            height: 80px;
+            background: #121212;
+            color: white;
+            border: 4px solid #121212;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 6px 6px 0px 0px #121212;
+        }
+
+        .process-step:nth-child(1) .process-number {
+            background: #D02020;
+        }
+
+        .process-step:nth-child(2) .process-number {
+            background: #1040C0;
+        }
+
+        .process-step:nth-child(3) .process-number {
+            background: #F0C020;
+            color: #121212;
+        }
+
+        .process-step:nth-child(4) .process-number {
+            background: white;
+            color: #121212;
+        }
+
+        .process-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .process-desc {
+            line-height: 1.6;
+        }
+
+        @media (min-width: 640px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Benefits */
+        .benefits {
+            background: #D02020;
+            color: white;
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .benefits .section-title {
+            color: white;
+        }
+
+        .benefits-list {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .benefit-check {
+            width: 32px;
+            height: 32px;
+            background: #F0C020;
+            border: 2px solid #121212;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 900;
+            color: #121212;
+        }
+
+        .benefit-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-content p {
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        /* Blog */
+        .blog {
+            background: #1040C0;
+            color: white;
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .blog .section-title {
+            color: white;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .blog-card {
+            background: white;
+            color: #121212;
+            border: 4px solid #121212;
+            overflow: hidden;
+            box-shadow: 8px 8px 0px 0px #121212;
+            transition: transform 0.2s ease-out;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: #E0E0E0;
+            border-bottom: 4px solid #121212;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 3rem;
+            filter: grayscale(1);
+            transition: filter 0.2s ease-out;
+        }
+
+        .blog-card:hover .blog-image {
+            filter: grayscale(0);
+        }
+
+        .blog-card:nth-child(1) .blog-image {
+            background: #D02020;
+            color: white;
+            border-radius: 0;
+        }
+
+        .blog-card:nth-child(2) .blog-image {
+            background: #F0C020;
+            color: #121212;
+        }
+
+        .blog-card:nth-child(3) .blog-image {
+            background: #1040C0;
+            color: white;
+            border-radius: 9999px;
+            margin: 1rem;
+            width: calc(100% - 2rem);
+            height: calc(200px - 2rem);
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .blog-category {
+            background: #121212;
+            color: white;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .blog-date {
+            color: #666;
+            padding: 0.25rem 0;
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            border: 4px solid #121212;
+            padding: 2rem;
+            box-shadow: 8px 8px 0px 0px #121212;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-size: 3rem;
+            line-height: 1;
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .testimonial-card:nth-child(1) .testimonial-quote {
+            color: #D02020;
+        }
+
+        .testimonial-card:nth-child(2) .testimonial-quote {
+            color: #1040C0;
+        }
+
+        .testimonial-card:nth-child(3) .testimonial-quote {
+            color: #F0C020;
+        }
+
+        .testimonial-text {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            border: 2px solid #121212;
+            background: #E0E0E0;
+            filter: grayscale(1);
+        }
+
+        .testimonial-card:nth-child(1) .testimonial-avatar {
+            background: #D02020;
+        }
+
+        .testimonial-card:nth-child(2) .testimonial-avatar {
+            background: #1040C0;
+        }
+
+        .testimonial-card:nth-child(3) .testimonial-avatar {
+            background: #F0C020;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 4px solid #121212;
+            padding: 2rem;
+            box-shadow: 8px 8px 0px 0px #121212;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: #121212;
+            color: white;
+        }
+
+        .pricing-label {
+            display: inline-block;
+            background: #F0C020;
+            color: #121212;
+            padding: 0.25rem 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 2px solid #121212;
+        }
+
+        .pricing-card.featured .pricing-features li {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            text-align: center;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .pricing-card.featured {
+                transform: scale(1.05);
+            }
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 4rem 1rem;
+            border-bottom: 4px solid #121212;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: white;
+            border: 4px solid #121212;
+            box-shadow: 4px 4px 0px 0px #121212;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            background: white;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease-out;
+        }
+
+        .faq-item.active .faq-question {
+            background: #D02020;
+            color: white;
+        }
+
+        .faq-chevron {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-out;
+        }
+
+        .faq-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #FFF9C4;
+            border-top: 4px solid #121212;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* CTA */
+        .cta {
+            background: #F0C020;
+            padding: 6rem 1rem;
+            border-bottom: 4px solid #121212;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-decorator-1 {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 9999px;
+            border: 4px solid #121212;
+            opacity: 0.5;
+            top: -100px;
+            right: -100px;
+        }
+
+        .cta-decorator-2 {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: #D02020;
+            border: 4px solid #121212;
+            transform: rotate(45deg);
+            opacity: 0.5;
+            bottom: -75px;
+            left: -75px;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        .cta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cta-input {
+            padding: 1rem;
+            border: 4px solid #121212;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 4px 4px 0px 0px #121212;
+        }
+
+        .cta-input:focus {
+            outline: none;
+            border-color: #D02020;
+        }
+
+        @media (min-width: 640px) {
+            .cta-form {
+                flex-direction: row;
+            }
+            .cta-input {
+                flex: 1;
+            }
+            .cta-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .cta-title {
+                font-size: 4rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: #121212;
+            color: white;
+            padding: 4rem 1rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .footer-column h4 {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s ease-out;
+        }
+
+        .footer-links a:hover {
+            color: #F0C020;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.875rem;
+            opacity: 0.6;
+        }
+
+        @media (min-width: 768px) {
+            .footer-top {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        /* Badge */
+        .design-badge {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: #121212;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: 2px solid #121212;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            box-shadow: 4px 4px 0px 0px #D02020;
+            z-index: 1000;
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-shapes">
+                    <div class="logo-circle"></div>
+                    <div class="logo-square"></div>
+                    <div class="logo-triangle"></div>
+                </div>
+                ACME
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#process">Process</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#blog">Blog</a>
+                <a href="#faq">FAQ</a>
+                <a href="#cta" class="nav-cta">Get Started</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-left">
+                <div class="hero-label">Est. 2024</div>
+                <h1 class="hero-headline">Build better. Ship faster.</h1>
+                <p class="hero-subtext">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                <div class="hero-cta">
+                    <a href="#cta" class="btn btn-primary">Start Project</a>
+                    <a href="#process" class="btn btn-secondary">Our Process</a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-visual">
+                    <div class="hero-circle"></div>
+                    <div class="hero-square-rotated"></div>
+                    <div class="hero-square-center">
+                        <div class="hero-triangle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">147+</div>
+                <div class="stat-label">Projects Delivered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Client Retention</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3.2x</div>
+                <div class="stat-label">Avg. ROI Increase</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">24h</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title fade-in">Features</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-decorator"></div>
+                    <div class="feature-icon">St</div>
+                    <h3 class="feature-title">Strategy</h3>
+                    <p class="feature-desc">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-decorator"></div>
+                    <div class="feature-icon">Ds</div>
+                    <h3 class="feature-title">Design Systems</h3>
+                    <p class="feature-desc">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-decorator"></div>
+                    <div class="feature-icon">Ux</div>
+                    <h3 class="feature-title">UX Research</h3>
+                    <p class="feature-desc">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-decorator"></div>
+                    <div class="feature-icon">Dv</div>
+                    <h3 class="feature-title">Development</h3>
+                    <p class="feature-desc">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-decorator"></div>
+                    <div class="feature-icon">An</div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-desc">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-decorator"></div>
+                    <div class="feature-icon">Sc</div>
+                    <h3 class="feature-title">Scale</h3>
+                    <p class="feature-desc">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process">
+        <div class="container">
+            <h2 class="section-title fade-in">Process</h2>
+            <div class="process-grid">
+                <div class="process-step fade-in">
+                    <div class="process-number">1</div>
+                    <h3 class="process-title">Discovery</h3>
+                    <p class="process-desc">Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">2</div>
+                    <h3 class="process-title">Define</h3>
+                    <p class="process-desc">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">3</div>
+                    <h3 class="process-title">Develop</h3>
+                    <p class="process-desc">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">4</div>
+                    <h3 class="process-title">Deliver</h3>
+                    <p class="process-desc">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title fade-in">Benefits</h2>
+            <div class="benefits-list">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-check">✓</div>
+                    <div class="benefit-content">
+                        <h3>End-to-end ownership</h3>
+                        <p>One team from strategy through launch. No handoff gaps, no context loss.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-check">✓</div>
+                    <div class="benefit-content">
+                        <h3>Transparent pricing</h3>
+                        <p>Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-check">✓</div>
+                    <div class="benefit-content">
+                        <h3>Senior-only teams</h3>
+                        <p>Every member has 8+ years of experience. No juniors learning on your project.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-check">✓</div>
+                    <div class="benefit-content">
+                        <h3>Production-grade code</h3>
+                        <p>Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-check">✓</div>
+                    <div class="benefit-content">
+                        <h3>Async-first culture</h3>
+                        <p>Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <h2 class="section-title fade-in">Blog</h2>
+            <div class="blog-grid">
+                <article class="blog-card fade-in">
+                    <div class="blog-image">Ds</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Design</span>
+                            <span class="blog-date">MAR 2024</span>
+                        </div>
+                        <h3 class="blog-title">Design Systems at Scale: Lessons from 50 Projects</h3>
+                    </div>
+                </article>
+                <article class="blog-card fade-in">
+                    <div class="blog-image">Bt</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Engineering</span>
+                            <span class="blog-date">FEB 2024</span>
+                        </div>
+                        <h3 class="blog-title">The Case for Boring Technology in 2024</h3>
+                    </div>
+                </article>
+                <article class="blog-card fade-in">
+                    <div class="blog-image">Pp</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Strategy</span>
+                            <span class="blog-date">JAN 2024</span>
+                        </div>
+                        <h3 class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title fade-in">Testimonials</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Sarah Chen</div>
+                            <div class="testimonial-role">CTO at Vertex</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Marcus Rivera</div>
+                            <div class="testimonial-role">VP Product at Helix</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Aisha Kamau</div>
+                            <div class="testimonial-role">Founder at Prism</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title fade-in">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-name">Starter</h3>
+                    <div class="pricing-price">$4,900/mo</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <button class="btn btn-primary pricing-cta">Get Started</button>
+                </div>
+                <div class="pricing-card featured fade-in">
+                    <div class="pricing-label">Featured</div>
+                    <h3 class="pricing-name">Professional</h3>
+                    <div class="pricing-price">$9,900/mo</div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <button class="btn btn-primary pricing-cta">Get Started</button>
+                </div>
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-name">Enterprise</h3>
+                    <div class="pricing-price">Custom</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <button class="btn btn-primary pricing-cta">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title fade-in">FAQ</h2>
+            <div class="faq-list">
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>How long does a typical project take?</span>
+                        <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Most projects run 8–16 weeks depending on scope.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>What technologies do you work with?</span>
+                        <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>Can you work with our existing team?</span>
+                        <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Absolutely. We embed seamlessly into existing workflows.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>What does your pricing include?</span>
+                        <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Everything: strategy, design, development, QA, and deployment.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>Do you offer ongoing support?</span>
+                        <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Yes. After launch, we offer retainer-based support packages.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta">
+        <div class="cta-decorator-1"></div>
+        <div class="cta-decorator-2"></div>
+        <div class="cta-content fade-in">
+            <h2 class="cta-title">Ready to build something great?</h2>
+            <form class="cta-form">
+                <input type="email" class="cta-input" placeholder="your@email.com" required>
+                <button type="submit" class="btn btn-primary">Let's Talk →</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand">
+                        <div class="logo-shapes">
+                            <div class="logo-circle"></div>
+                            <div class="logo-square"></div>
+                            <div class="logo-triangle"></div>
+                        </div>
+                        ACME
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2024 ACME INC.
+            </div>
+        </div>
+    </footer>
+
+    <div class="design-badge">Bauhaus</div>
+
+    <script>
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form Submit Handler
+        document.querySelector('.cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thanks for your interest! We\'ll be in touch soon.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>

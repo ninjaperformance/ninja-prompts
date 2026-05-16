@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME INC. - Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Impact&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #C0C0C0;
+            background-image:
+                linear-gradient(45deg, #b8b8b8 25%, transparent 25%),
+                linear-gradient(-45deg, #b8b8b8 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #b8b8b8 75%),
+                linear-gradient(-45deg, transparent 75%, #b8b8b8 75%);
+            background-size: 4px 4px;
+            background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+            color: #000000;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: #000080;
+            color: #ffffff;
+        }
+
+        a {
+            color: #0000FF;
+            text-decoration: underline;
+            transition: none;
+        }
+
+        a:visited {
+            color: #800080;
+        }
+
+        a:hover {
+            color: #FF0000;
+        }
+
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .section {
+            padding: 64px 0;
+        }
+
+        .hr-groove {
+            border: none;
+            height: 4px;
+            background: linear-gradient(to bottom, #808080 0%, #808080 50%, #ffffff 50%, #ffffff 100%);
+            margin: 32px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+            background: #C0C0C0;
+            color: #000000;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: none;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #d0d0d0;
+            color: #000000;
+        }
+
+        .btn:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+            transform: translate(1px, 1px);
+        }
+
+        .btn:focus-visible {
+            outline: 2px dotted #000000;
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: #0000FF;
+            color: #ffffff;
+            border-color: #5555ff #000080 #000080 #5555ff;
+        }
+
+        .btn-primary:hover {
+            background: #0000CC;
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .btn-success {
+            background: #00AA00;
+            color: #ffffff;
+            border-color: #00ff00 #006600 #006600 #00ff00;
+        }
+
+        .btn-success:hover {
+            background: #008800;
+            color: #ffffff;
+        }
+
+        .card {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+            background: #C0C0C0;
+            margin-bottom: 16px;
+        }
+
+        .card-titlebar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: #ffffff;
+            font-weight: bold;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .card-content {
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+            background: #ffffff;
+            padding: 16px;
+        }
+
+        .card-yellow {
+            background: #FFFFCC;
+        }
+
+        .input-field {
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+            background: #ffffff;
+            padding: 4px 8px;
+            color: #000000;
+            font-family: "MS Sans Serif", sans-serif;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: 2px dotted #000000;
+            outline-offset: 2px;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            17% { color: #ff8000; }
+            33% { color: #ffff00; }
+            50% { color: #00ff00; }
+            67% { color: #0080ff; }
+            83% { color: #8000ff; }
+            100% { color: #ff0000; }
+        }
+
+        .text-rainbow {
+            animation: rainbow 4s linear infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        .marquee-container {
+            background: #000080;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            padding: 8px 0;
+            overflow: hidden;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-item {
+            padding: 0 32px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .bg-construction {
+            background: repeating-linear-gradient(
+                45deg,
+                #ffff00,
+                #ffff00 10px,
+                #000000 10px,
+                #000000 20px
+            );
+        }
+
+        .hit-counter {
+            background: #000000;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #404040;
+            padding: 8px 16px;
+            font-family: "Courier New", monospace;
+            color: #00FF00;
+            display: inline-block;
+        }
+
+        .badge-new {
+            background: #FF0000;
+            color: #FFFF00;
+            border: 2px solid;
+            border-color: #ff5555 #800000 #800000 #ff5555;
+            box-shadow: inset -1px -1px 0 #400000, inset 1px 1px 0 #ff8888;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+            display: inline-block;
+            letter-spacing: 0.1em;
+        }
+
+        .nav {
+            background: #C0C0C0;
+            border-bottom: 4px solid #000000;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-family: "Impact", "Arial Black", sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #000000;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 0 #808080;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 64px 0;
+        }
+
+        .hero-label {
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #808080;
+            margin-bottom: 16px;
+        }
+
+        .hero-headline {
+            font-family: "Impact", "Arial Black", sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtext {
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 32px;
+            color: #000000;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            margin-top: 48px;
+            border: 4px solid #000000;
+            height: 300px;
+            background: linear-gradient(135deg, #0000FF 0%, #FF0000 50%, #FFFF00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Impact", sans-serif;
+            font-size: 48px;
+            color: #ffffff;
+            text-shadow: 3px 3px 0 #000000;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            border: 2px solid #000000;
+            background: #ffffff;
+        }
+
+        .stat-value {
+            font-family: "Courier New", monospace;
+            font-size: 32px;
+            font-weight: bold;
+            color: #0000FF;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #000000;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+            background: #C0C0C0;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Impact", sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .icon-blue { background: #0000FF; }
+        .icon-red { background: #FF0000; }
+        .icon-green { background: #00AA00; }
+        .icon-purple { background: #800080; }
+        .icon-cyan { background: #008080; }
+        .icon-orange { background: #FF8000; }
+
+        .feature-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .process-step {
+            border: 2px solid #000000;
+            background: #ffffff;
+            padding: 16px;
+        }
+
+        .process-number {
+            font-family: "Impact", sans-serif;
+            font-size: 48px;
+            color: #0000FF;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .process-title {
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .benefits-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .benefit-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 16px;
+            padding: 16px;
+            border: 2px solid #000000;
+            background: #E8E8E8;
+        }
+
+        .benefit-item:nth-child(even) {
+            background: #ffffff;
+        }
+
+        .benefit-number {
+            font-family: "Impact", sans-serif;
+            font-size: 32px;
+            color: #FF0000;
+            line-height: 1;
+        }
+
+        .benefit-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .blog-card {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -2px -2px 0 #808080, inset 2px 2px 0 #fff;
+            background: #C0C0C0;
+        }
+
+        .blog-meta {
+            font-family: "Courier New", monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #808080;
+            margin-bottom: 8px;
+        }
+
+        .blog-title {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-card {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+            background: #C0C0C0;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-content {
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #404040;
+            background: #FFFFCC;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .testimonial-author {
+            padding: 8px 16px;
+            font-weight: bold;
+            font-size: 12px;
+            background: #C0C0C0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .pricing-card {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -2px -2px 0 #808080, inset 2px 2px 0 #fff;
+            background: #C0C0C0;
+        }
+
+        .pricing-card.featured {
+            border: 4px solid #FF0000;
+        }
+
+        .pricing-header {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: #ffffff;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .pricing-name {
+            font-family: "Impact", sans-serif;
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-family: "Courier New", monospace;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .pricing-features {
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            background: #ffffff;
+            padding: 16px;
+            list-style: none;
+        }
+
+        .pricing-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #C0C0C0;
+            font-size: 13px;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+            background: #C0C0C0;
+            margin-bottom: 8px;
+        }
+
+        .faq-question {
+            padding: 12px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #C0C0C0;
+        }
+
+        .faq-question:hover {
+            background: #d0d0d0;
+        }
+
+        .faq-answer {
+            border-top: 2px solid #808080;
+            padding: 16px;
+            background: #ffffff;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        .footer {
+            background: #000000;
+            color: #ffffff;
+            padding: 32px 0 16px;
+            margin-top: 64px;
+            border-top: 4px solid #FF0000;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #FFFF00;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #00FF00;
+        }
+
+        .footer-links a:visited {
+            color: #00AA00;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 2px solid #808080;
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+            color: #808080;
+        }
+
+        .section-title {
+            font-family: "Impact", "Arial Black", sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 64px 32px;
+        }
+
+        .cta-title {
+            font-family: "Impact", sans-serif;
+            font-size: 48px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .design-badge {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: #FF0000;
+            color: #FFFF00;
+            padding: 8px 16px;
+            border: 2px solid;
+            border-color: #ff5555 #800000 #800000 #ff5555;
+            box-shadow: inset -1px -1px 0 #400000, inset 1px 1px 0 #ff8888;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            z-index: 9999;
+            letter-spacing: 0.1em;
+        }
+
+        .color-squares {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin: 32px 0;
+        }
+
+        .color-square {
+            aspect-ratio: 1;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+        }
+
+        .square-red { background: #FF0000; }
+        .square-green { background: #00FF00; }
+        .square-blue { background: #0000FF; }
+        .square-yellow { background: #FFFF00; }
+        .square-magenta { background: #FF00FF; }
+        .square-cyan { background: #00FFFF; }
+
+        @media (max-width: 768px) {
+            .hero-headline {
+                font-size: 48px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .color-squares {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .text-rainbow {
+                animation: none;
+                color: #ff0000;
+            }
+
+            .pulse-glow {
+                animation: none;
+            }
+
+            .blink {
+                animation: none;
+                opacity: 1;
+            }
+
+            .marquee-content {
+                animation: none;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span class="marquee-item" style="color: #FF0000;">★ WELCOME TO ACME INC ★</span>
+            <span class="marquee-item" style="color: #00FF00;">● NEW PROJECTS AVAILABLE ●</span>
+            <span class="marquee-item" style="color: #FFFF00;">■ PROFESSIONAL SERVICES ■</span>
+            <span class="marquee-item" style="color: #00FFFF;">▲ SCROLL FOR MORE ▲</span>
+            <span class="marquee-item" style="color: #FF00FF;">♦ EXPERT TEAM ♦</span>
+            <span class="marquee-item" style="color: #FF0000;">★ WELCOME TO ACME INC ★</span>
+            <span class="marquee-item" style="color: #00FF00;">● NEW PROJECTS AVAILABLE ●</span>
+            <span class="marquee-item" style="color: #FFFF00;">■ PROFESSIONAL SERVICES ■</span>
+            <span class="marquee-item" style="color: #00FFFF;">▲ SCROLL FOR MORE ▲</span>
+            <span class="marquee-item" style="color: #FF00FF;">♦ EXPERT TEAM ♦</span>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="#" class="logo">ACME</a>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#process">Process</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#blog">Blog</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#cta" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <div class="hero-label">Est. 2024</div>
+            <h1 class="hero-headline text-rainbow">Build better. Ship faster.</h1>
+            <p class="hero-subtext">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn btn-primary">Start Project</a>
+                <a href="#process" class="btn btn-secondary">Our Process</a>
+            </div>
+            <div class="hero-visual">ACME</div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section class="section reveal">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value">147+</span>
+                    <span class="stat-label">Projects Delivered</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">98%</span>
+                    <span class="stat-label">Client Retention</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">3.2x</span>
+                    <span class="stat-label">Avg. ROI Increase</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">24h</span>
+                    <span class="stat-label">Response Time</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 32px;">
+                <div class="hit-counter">
+                    Visitors: 0001234 | Since 1995 | Last Updated: TODAY
+                </div>
+            </div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section id="features" class="section reveal">
+            <h2 class="section-title">Features <span class="badge-new pulse-glow">HOT!</span></h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="card-content">
+                        <div class="feature-icon icon-blue">St</div>
+                        <div class="feature-title">Strategy</div>
+                        <div class="feature-desc">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-content">
+                        <div class="feature-icon icon-red">Ds</div>
+                        <div class="feature-title">Design Systems</div>
+                        <div class="feature-desc">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-content">
+                        <div class="feature-icon icon-green">Ux</div>
+                        <div class="feature-title">UX Research</div>
+                        <div class="feature-desc">User interviews, usability testing, and data-driven insights that inform every design decision.</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-content">
+                        <div class="feature-icon icon-purple">Dv</div>
+                        <div class="feature-title">Development</div>
+                        <div class="feature-desc">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-content">
+                        <div class="feature-icon icon-cyan">An</div>
+                        <div class="feature-title">Analytics</div>
+                        <div class="feature-desc">Custom dashboards, event tracking, and conversion optimization to measure what matters.</div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-content">
+                        <div class="feature-icon icon-orange">Sc</div>
+                        <div class="feature-title">Scale</div>
+                        <div class="feature-desc">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section id="process" class="section reveal">
+            <h2 class="section-title">Process</h2>
+            
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <div class="process-title">Discovery</div>
+                    <div class="process-desc">Deep dive into your business goals, user needs, and technical landscape.</div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <div class="process-title">Define</div>
+                    <div class="process-desc">Strategy crystallized into wireframes, prototypes, and technical specifications.</div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <div class="process-title">Develop</div>
+                    <div class="process-desc">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <div class="process-title">Deliver</div>
+                    <div class="process-desc">Launch support, performance monitoring, and iterative optimization based on real user data.</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section class="section reveal">
+            <h2 class="section-title">Benefits</h2>
+            
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-number">1</div>
+                    <div>
+                        <div class="benefit-title">End-to-end ownership</div>
+                        <div class="benefit-desc">One team from strategy through launch. No handoff gaps, no context loss.</div>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-number">2</div>
+                    <div>
+                        <div class="benefit-title">Transparent pricing</div>
+                        <div class="benefit-desc">Fixed-scope engagements with clear milestones. No surprise invoices.</div>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-number">3</div>
+                    <div>
+                        <div class="benefit-title">Senior-only teams</div>
+                        <div class="benefit-desc">Every member has 8+ years of experience. No juniors learning on your project.</div>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-number">4</div>
+                    <div>
+                        <div class="benefit-title">Production-grade code</div>
+                        <div class="benefit-desc">Tested, documented, and built to scale. Your codebase is an asset, not a liability.</div>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-number">5</div>
+                    <div>
+                        <div class="benefit-title">Async-first culture</div>
+                        <div class="benefit-desc">Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section id="blog" class="section reveal">
+            <h2 class="section-title">Blog <span class="badge-new blink">NEW</span></h2>
+            
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="card-content">
+                        <div class="blog-meta">Design • MAR 2024</div>
+                        <div class="blog-title">Design Systems at Scale: Lessons from 50 Projects</div>
+                        <a href="#">Read More →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="card-content">
+                        <div class="blog-meta">Engineering • FEB 2024</div>
+                        <div class="blog-title">The Case for Boring Technology in 2024</div>
+                        <a href="#">Read More →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="card-content">
+                        <div class="blog-meta">Strategy • JAN 2024</div>
+                        <div class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</div>
+                        <a href="#">Read More →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section class="section reveal">
+            <h2 class="section-title">Testimonials</h2>
+            
+            <div class="testimonial-card">
+                <div class="card-titlebar">Sarah Chen, CTO at Vertex</div>
+                <div class="testimonial-content">
+                    Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires.
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="card-titlebar">Marcus Rivera, VP Product at Helix</div>
+                <div class="testimonial-content">
+                    The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment.
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="card-titlebar">Aisha Kamau, Founder at Prism</div>
+                <div class="testimonial-content">
+                    They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it.
+                </div>
+            </div>
+        </section>
+
+        <div class="hr-groove"></div>
+
+        <section id="pricing" class="section reveal">
+            <h2 class="section-title">Pricing</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-name">Starter</div>
+                        <div class="pricing-price">$4,900/mo</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <div style="padding: 16px;">
+                        <a href="#cta" class="btn" style="width: 100%;">Get Started</a>
+                    </div>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-header">
+                        <div class="pricing-name">Professional <span class="badge-new pulse-glow">★</span></div>
+                        <div class="pricing-price">$9,900/mo</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <div style="padding: 16px;">
+                        <a href="#cta" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                    </div>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-name">Enterprise</div>
+                        <div class="pricing-price">Custom</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <div style="padding: 16px;">
+                        <a href="#cta" class="btn btn-success" style="width: 100%;">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="color-squares">
+            <div class="color-square square-red"></div>
+            <div class="color-square square-green"></div>
+            <div class="color-square square-blue"></div>
+            <div class="color-square square-yellow"></div>
+            <div class="color-square square-magenta"></div>
+            <div class="color-square square-cyan"></div>
+        </div>
+
+        <div class="hr-groove"></div>
+
+        <section id="faq" class="section reveal">
+            <h2 class="section-title">FAQ</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How long does a typical project take?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Most projects run 8–16 weeks depending on scope.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What technologies do you work with?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    We're framework-agnostic but most commonly work with React, Next.js, and Node.js.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Can you work with our existing team?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Absolutely. We embed seamlessly into existing workflows.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What does your pricing include?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Everything: strategy, design, development, QA, and deployment.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Do you offer ongoing support?</span>
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. After launch, we offer retainer-based support packages.
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="hr-groove" style="margin: 64px 0 0 0;"></div>
+
+    <section id="cta" class="cta-section bg-construction">
+        <div class="container">
+            <div class="card">
+                <div class="card-titlebar">★★★ FINAL CALL TO ACTION ★★★</div>
+                <div class="card-content" style="padding: 48px 32px; text-align: center;">
+                    <h2 class="cta-title">Ready to build something great?</h2>
+                    <form class="cta-form" onsubmit="return false;">
+                        <input type="email" class="input-field cta-input" placeholder="your@email.com" required>
+                        <button type="submit" class="btn btn-primary">Let's Talk →</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo" style="color: #FFFF00; font-size: 24px;">ACME</div>
+                    <p style="margin-top: 16px; color: #808080; font-size: 12px;">Building the future since 2024.</p>
+                </div>
+                <div>
+                    <div class="footer-title">Product</div>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Company</div>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-title">Connect</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2024 ACME INC. — ALL RIGHTS RESERVED
+            </div>
+        </div>
+    </footer>
+
+    <div class="design-badge">
+        RETRO
+    </div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // FAQ accordion
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span:last-child');
+            
+            answer.classList.toggle('active');
+            icon.textContent = answer.classList.contains('active') ? '▲' : '▼';
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Marquee loop (duplicate content for infinite scroll effect)
+        const marqueeContent = document.querySelector('.marquee-content');
+        if (marqueeContent) {
+            const clone = marqueeContent.cloneNode(true);
+            marqueeContent.parentElement.appendChild(clone);
+        }
+    </script>
+</body>
+</html>

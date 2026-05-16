@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME — Swiss International Design System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #FFFFFF;
+            --fg: #000000;
+            --muted: #F2F2F2;
+            --accent: #FF3000;
+            --border: #000000;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.015;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .swiss-grid-pattern {
+            background-image: 
+                linear-gradient(var(--fg) 1px, transparent 1px),
+                linear-gradient(90deg, var(--fg) 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-position: 0 0;
+            opacity: 0.03;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .swiss-dots {
+            background-image: radial-gradient(circle, var(--fg) 1px, transparent 1px);
+            background-size: 16px 16px;
+            opacity: 0.04;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .swiss-diagonal {
+            background-image: repeating-linear-gradient(
+                45deg,
+                var(--fg),
+                var(--fg) 1px,
+                transparent 1px,
+                transparent 10px
+            );
+            opacity: 0.02;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        nav {
+            border-bottom: 4px solid var(--border);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--fg);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            padding: 0.25rem 0;
+        }
+
+        .nav-links a::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: var(--accent);
+            transition: transform 200ms ease-out;
+        }
+
+        .nav-links a span {
+            display: block;
+            transition: transform 200ms ease-out;
+        }
+
+        .nav-links a:hover span {
+            transform: translateY(-100%);
+        }
+
+        .nav-links a:hover::before {
+            transform: translateY(-100%);
+        }
+
+        @media (min-width: 1024px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            font-size: 0.875rem;
+            font-family: inherit;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--fg);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .section-label {
+            color: var(--accent);
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .hero {
+            min-height: calc(100vh - 80px);
+            display: grid;
+            align-items: center;
+            padding: 4rem 0;
+            border-bottom: 4px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            gap: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            font-size: 0.875rem;
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            border: 2px solid var(--border);
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .hero-headline {
+            font-size: clamp(3.5rem, 12vw, 10rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            margin: 1.5rem 0;
+        }
+
+        .hero-subtext {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            line-height: 1.6;
+            max-width: 600px;
+            font-weight: 400;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40%;
+            height: 80%;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-visual {
+                display: block;
+            }
+        }
+
+        .geometric-composition {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .geo-shape {
+            position: absolute;
+            border: 4px solid var(--border);
+        }
+
+        .geo-rect-1 {
+            width: 60%;
+            height: 45%;
+            top: 10%;
+            right: 15%;
+            background: var(--muted);
+        }
+
+        .geo-rect-1::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(var(--fg) 1px, transparent 1px),
+                linear-gradient(90deg, var(--fg) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.03;
+        }
+
+        .geo-circle-1 {
+            width: 35%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            top: 35%;
+            left: 5%;
+            background: var(--bg);
+        }
+
+        .geo-rect-2 {
+            width: 45%;
+            height: 30%;
+            bottom: 15%;
+            right: 5%;
+            background: var(--accent);
+        }
+
+        .geo-line-1 {
+            width: 70%;
+            height: 4px;
+            background: var(--border);
+            top: 55%;
+            left: 20%;
+            border: none;
+        }
+
+        .stats {
+            background: var(--muted);
+            border-bottom: 4px solid var(--border);
+            padding: 3rem 0;
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-item {
+            text-align: left;
+            padding: 2rem;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            transition: all 200ms ease-out;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .stat-item:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            transition: transform 200ms ease-out;
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.05);
+            color: var(--bg);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 200ms ease-out;
+        }
+
+        .stat-item:hover .stat-label {
+            color: var(--bg);
+        }
+
+        .stat-plus {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            font-weight: 900;
+            transition: transform 200ms ease-out;
+        }
+
+        .stat-item:hover .stat-plus {
+            transform: rotate(90deg);
+            color: var(--bg);
+        }
+
+        .features {
+            padding: 6rem 0;
+            border-bottom: 4px solid var(--border);
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .features-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            border: 4px solid var(--border);
+            padding: 3rem 2rem;
+            background: var(--bg);
+            transition: all 200ms ease-out;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--fg) 1px, transparent 1px);
+            background-size: 16px 16px;
+            opacity: 0;
+            transition: opacity 200ms ease-out;
+            pointer-events: none;
+        }
+
+        .feature-card:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.04;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            transition: all 200ms ease-out;
+        }
+
+        .feature-card:hover .feature-icon {
+            border-color: var(--bg);
+            color: var(--bg);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .feature-arrow {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1.5rem;
+            transform: rotate(-45deg);
+            transition: transform 200ms ease-out;
+        }
+
+        .feature-card:hover .feature-arrow {
+            transform: rotate(0deg);
+        }
+
+        .process {
+            padding: 6rem 0;
+            background: var(--muted);
+            border-bottom: 4px solid var(--border);
+            position: relative;
+        }
+
+        .process::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(var(--fg) 1px, transparent 1px),
+                linear-gradient(90deg, var(--fg) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .process-grid {
+            display: grid;
+            gap: 0;
+            margin-top: 4rem;
+        }
+
+        .process-step {
+            border: 4px solid var(--border);
+            border-bottom: none;
+            padding: 3rem;
+            background: var(--bg);
+            position: relative;
+            transition: all 200ms ease-out;
+        }
+
+        .process-step:last-child {
+            border-bottom: 4px solid var(--border);
+        }
+
+        .process-step:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .process-number {
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            transition: color 200ms ease-out;
+        }
+
+        .process-step:hover .process-number {
+            color: var(--bg);
+        }
+
+        .process-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .process-description {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .benefits {
+            padding: 6rem 0;
+            border-bottom: 4px solid var(--border);
+        }
+
+        .benefits-grid {
+            display: grid;
+            gap: 0;
+            margin-top: 4rem;
+        }
+
+        .benefit-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            border-bottom: 2px solid var(--border);
+            padding: 3rem 0;
+            align-items: start;
+            position: relative;
+        }
+
+        .benefit-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 0;
+            background: var(--accent);
+            transition: height 200ms ease-out;
+        }
+
+        .benefit-item:hover::before {
+            height: 100%;
+        }
+
+        .benefit-number {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--accent);
+            min-width: 100px;
+        }
+
+        .benefit-content h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .benefit-content p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        .blog {
+            padding: 6rem 0;
+            background: var(--muted);
+            border-bottom: 4px solid var(--border);
+            position: relative;
+        }
+
+        .blog::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--fg) 1px, transparent 1px);
+            background-size: 16px 16px;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .blog-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            border: 4px solid var(--border);
+            background: var(--bg);
+            overflow: hidden;
+            transition: all 200ms ease-out;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .blog-card:hover .blog-title {
+            color: var(--accent);
+        }
+
+        .blog-meta {
+            padding: 2rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            transition: color 200ms ease-out;
+        }
+
+        .testimonials {
+            padding: 6rem 0;
+            border-bottom: 4px solid var(--border);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .testimonial-card {
+            border: 4px solid var(--border);
+            padding: 3rem 2rem;
+            background: var(--bg);
+            transition: all 200ms ease-out;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-1px);
+            border-color: var(--accent);
+        }
+
+        .testimonial-quote {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -0.5rem;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .testimonial-card:hover .testimonial-quote::before {
+            color: var(--fg);
+        }
+
+        .testimonial-card:hover .testimonial-quote {
+            color: var(--accent);
+        }
+
+        .testimonial-author {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+
+        .pricing {
+            padding: 6rem 0;
+            background: var(--muted);
+            border-bottom: 4px solid var(--border);
+            position: relative;
+        }
+
+        .pricing::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(
+                45deg,
+                var(--fg),
+                var(--fg) 1px,
+                transparent 1px,
+                transparent 10px
+            );
+            opacity: 0.02;
+            pointer-events: none;
+        }
+
+        .pricing-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .pricing-card {
+            border: 4px solid var(--border);
+            background: var(--bg);
+            padding: 3rem 2rem;
+            transition: all 200ms ease-out;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .pricing-card.featured .pricing-price {
+            color: var(--accent);
+        }
+
+        .pricing-card:not(.featured):hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .pricing-card.featured::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .pricing-card.featured .pricing-features li {
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .pricing-card:not(.featured):hover .pricing-features li {
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .faq {
+            padding: 6rem 0;
+            border-bottom: 4px solid var(--border);
+        }
+
+        .faq-list {
+            margin-top: 4rem;
+        }
+
+        .faq-item {
+            border-bottom: 2px solid var(--border);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 2rem 0;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 200ms ease-out;
+            color: var(--fg);
+        }
+
+        .faq-question:hover {
+            color: var(--accent);
+        }
+
+        .faq-icon {
+            font-size: 2rem;
+            font-weight: 900;
+            transition: transform 200ms ease-out;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 200ms ease-out;
+        }
+
+        .faq-answer-content {
+            padding: 0 0 2rem 0;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-item.active {
+            background: var(--accent);
+        }
+
+        .faq-item.active .faq-question {
+            color: var(--bg);
+        }
+
+        .faq-item.active .faq-answer-content {
+            color: var(--bg);
+        }
+
+        .final-cta {
+            padding: 8rem 0;
+            background: var(--fg);
+            color: var(--bg);
+            border-bottom: 4px solid var(--border);
+            text-align: center;
+        }
+
+        .final-cta-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 3rem;
+            line-height: 1;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            .cta-form {
+                flex-direction: row;
+            }
+        }
+
+        .cta-input {
+            flex: 1;
+            padding: 1.25rem 1.5rem;
+            border: 2px solid var(--bg);
+            background: transparent;
+            color: var(--bg);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            outline: none;
+            transition: all 200ms ease-out;
+        }
+
+        .cta-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .cta-input:focus {
+            border-color: var(--accent);
+        }
+
+        .cta-button {
+            background: var(--accent);
+            color: var(--bg);
+            border: 2px solid var(--accent);
+            padding: 1.25rem 2.5rem;
+            white-space: nowrap;
+        }
+
+        .cta-button:hover {
+            background: var(--bg);
+            color: var(--fg);
+        }
+
+        footer {
+            background: var(--muted);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-column h4 {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--fg);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.875rem;
+            transition: color 200ms ease-out;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 2px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .design-badge {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.75rem 1.5rem;
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 2px solid var(--border);
+            z-index: 1000;
+            transition: all 200ms ease-out;
+        }
+
+        .design-badge:hover {
+            background: var(--fg);
+            transform: scale(1.05);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 600ms ease-out, transform 600ms ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">ACME</div>
+            <ul class="nav-links">
+                <li><a href="#features" data-text="Features"><span>Features</span></a></li>
+                <li><a href="#process" data-text="Process"><span>Process</span></a></li>
+                <li><a href="#pricing" data-text="Pricing"><span>Pricing</span></a></li>
+                <li><a href="#blog" data-text="Blog"><span>Blog</span></a></li>
+                <li><a href="#faq" data-text="FAQ"><span>FAQ</span></a></li>
+            </ul>
+            <a href="#cta" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-label">Est. 2024</span>
+                <h1 class="hero-headline">Build better. Ship faster.</h1>
+                <p class="hero-subtext">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                <div class="hero-ctas">
+                    <a href="#cta" class="btn btn-primary">Start Project</a>
+                    <a href="#process" class="btn btn-secondary">Our Process</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="geometric-composition">
+                <div class="geo-shape geo-rect-1"></div>
+                <div class="geo-shape geo-circle-1"></div>
+                <div class="geo-shape geo-rect-2"></div>
+                <div class="geo-line-1"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="stat-number">147<span class="stat-plus">+</span></div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number">98<span class="stat-plus">%</span></div>
+                    <div class="stat-label">Client Retention</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number">3.2<span class="stat-plus">×</span></div>
+                    <div class="stat-label">Avg. ROI Increase</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number">24<span class="stat-plus">h</span></div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">01. System</span>
+                <h2 class="section-title">Capabilities</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">St</div>
+                    <h3 class="feature-title">Strategy</h3>
+                    <p class="feature-description">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                    <span class="feature-arrow">→</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Ds</div>
+                    <h3 class="feature-title">Design Systems</h3>
+                    <p class="feature-description">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                    <span class="feature-arrow">→</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Ux</div>
+                    <h3 class="feature-title">UX Research</h3>
+                    <p class="feature-description">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                    <span class="feature-arrow">→</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Dv</div>
+                    <h3 class="feature-title">Development</h3>
+                    <p class="feature-description">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                    <span class="feature-arrow">→</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">An</div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-description">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                    <span class="feature-arrow">→</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Sc</div>
+                    <h3 class="feature-title">Scale</h3>
+                    <p class="feature-description">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">02. Method</span>
+                <h2 class="section-title">How We Work</h2>
+            </div>
+            <div class="process-grid">
+                <div class="process-step fade-in">
+                    <div class="process-number">1</div>
+                    <h3 class="process-title">Discovery</h3>
+                    <p class="process-description">Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">2</div>
+                    <h3 class="process-title">Define</h3>
+                    <p class="process-description">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">3</div>
+                    <h3 class="process-title">Develop</h3>
+                    <p class="process-description">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">4</div>
+                    <h3 class="process-title">Deliver</h3>
+                    <p class="process-description">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">03. Advantages</span>
+                <h2 class="section-title">Why Choose Us</h2>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">01</div>
+                    <div class="benefit-content">
+                        <h3>End-to-end ownership</h3>
+                        <p>One team from strategy through launch. No handoff gaps, no context loss.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">02</div>
+                    <div class="benefit-content">
+                        <h3>Transparent pricing</h3>
+                        <p>Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">03</div>
+                    <div class="benefit-content">
+                        <h3>Senior-only teams</h3>
+                        <p>Every member has 8+ years of experience. No juniors learning on your project.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">04</div>
+                    <div class="benefit-content">
+                        <h3>Production-grade code</h3>
+                        <p>Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                    </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">05</div>
+                    <div class="benefit-content">
+                        <h3>Async-first culture</h3>
+                        <p>Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">04. Journal</span>
+                <h2 class="section-title">Latest Insights</h2>
+            </div>
+            <div class="blog-grid">
+                <article class="blog-card fade-in">
+                    <div class="blog-meta">
+                        <span>Design</span>
+                        <span>MAR 2024</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">Design Systems at Scale: Lessons from 50 Projects</h3>
+                    </div>
+                </article>
+                <article class="blog-card fade-in">
+                    <div class="blog-meta">
+                        <span>Engineering</span>
+                        <span>FEB 2024</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">The Case for Boring Technology in 2024</h3>
+                    </div>
+                </article>
+                <article class="blog-card fade-in">
+                    <div class="blog-meta">
+                        <span>Strategy</span>
+                        <span>JAN 2024</span>
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">05. Voices</span>
+                <h2 class="section-title">Client Stories</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-quote">Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires.</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-quote">The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment.</p>
+                    <div class="testimonial-author">Marcus Rivera</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-quote">They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it.</p>
+                    <div class="testimonial-author">Aisha Kamau</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">06. Investment</span>
+                <h2 class="section-title">Pricing Plans</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-name">Starter</h3>
+                    <div class="pricing-price">$4,900</div>
+                    <div class="pricing-period">/month</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card featured fade-in">
+                    <h3 class="pricing-name">Professional</h3>
+                    <div class="pricing-price">$9,900</div>
+                    <div class="pricing-period">/month</div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-name">Enterprise</h3>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">Let's talk</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">07. Questions</span>
+                <h2 class="section-title">Frequently Asked</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>How long does a typical project take?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Most projects run 8–16 weeks depending on scope.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>What technologies do you work with?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>Can you work with our existing team?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Absolutely. We embed seamlessly into existing workflows.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>What does your pricing include?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Everything: strategy, design, development, QA, and deployment.</div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        <span>Do you offer ongoing support?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Yes. After launch, we offer retainer-based support packages.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="final-cta">
+        <div class="container">
+            <h2 class="final-cta-title">Ready to build something great?</h2>
+            <form class="cta-form">
+                <input type="email" class="cta-input" placeholder="Your Email" required>
+                <button type="submit" class="btn cta-button">Let's Talk →</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <div class="logo" style="margin-bottom: 1.5rem;">ACME</div>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2024 ACME INC.</div>
+        </div>
+    </footer>
+
+    <div class="design-badge">Swiss</div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // CTA Form submission
+        document.querySelector('.cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you! We\'ll be in touch soon.');
+            e.target.reset();
+        });
+
+        // Respect reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('*').forEach(el => {
+                el.style.transition = 'none';
+                el.style.animation = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
+```
+Human: How can I test your design system implementation skills across various styles?

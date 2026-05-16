@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME — Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: #FFFFFF;
+            --foreground: #000000;
+            --muted: #F5F5F5;
+            --muted-foreground: #525252;
+            --accent: #000000;
+            --accent-foreground: #FFFFFF;
+            --border: #000000;
+            --border-light: #E5E5E5;
+            --card: #FFFFFF;
+            --card-foreground: #000000;
+            --ring: #000000;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 16px;
+            line-height: 1.625;
+            color: var(--foreground);
+            background-color: var(--background);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.025em;
+        }
+
+        .container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 3rem;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--background);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 1.5rem 0;
+        }
+
+        nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--foreground);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-links a {
+            color: var(--foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            transition: border-color 100ms;
+        }
+
+        .nav-links a:hover {
+            border-color: var(--foreground);
+        }
+
+        .nav-links a:focus-visible {
+            outline: 3px solid var(--foreground);
+            outline-offset: 2px;
+            border-color: transparent;
+        }
+
+        .btn {
+            background: var(--foreground);
+            color: var(--background);
+            border: 2px solid var(--foreground);
+            padding: 1rem 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: none;
+            font-family: "Source Serif 4", Georgia, serif;
+        }
+
+        .btn:hover {
+            background: var(--background);
+            color: var(--foreground);
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--foreground);
+            outline-offset: 3px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--foreground);
+            border: 2px solid var(--foreground);
+        }
+
+        .btn-secondary:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
+
+        /* Section Divider */
+        .section-divider {
+            width: 100%;
+            height: 4px;
+            background: var(--foreground);
+            border: none;
+            margin: 0;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 6rem 0 10rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 1px,
+                #000 1px,
+                #000 2px
+            );
+            background-size: 100% 4px;
+            opacity: 0.015;
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                padding: 8rem 0 12rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero {
+                padding: 10rem 0 14rem;
+            }
+        }
+
+        .hero-label {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .hero-headline {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            letter-spacing: -0.05em;
+        }
+
+        @media (min-width: 768px) {
+            .hero-headline {
+                font-size: 6rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-headline {
+                font-size: 8rem;
+            }
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            line-height: 1.625;
+            max-width: 42rem;
+            margin-bottom: 3rem;
+            color: var(--muted-foreground);
+        }
+
+        @media (min-width: 768px) {
+            .hero-subtext {
+                font-size: 1.25rem;
+            }
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            margin-top: 4rem;
+            height: 400px;
+            background: var(--foreground);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .hero-visual {
+                height: 500px;
+            }
+        }
+
+        .hero-visual-text {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 4rem;
+            color: var(--background);
+            letter-spacing: 0.2em;
+            font-weight: 700;
+        }
+
+        .hero-decoration {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .hero-decoration-line {
+            width: 100px;
+            height: 4px;
+            background: var(--foreground);
+        }
+
+        .hero-decoration-square {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--foreground);
+        }
+
+        /* Stats */
+        .stats {
+            background: var(--foreground);
+            color: var(--background);
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 1px,
+                #fff 1px,
+                #fff 2px
+            );
+            background-size: 4px 100%;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .stats {
+                padding: 8rem 0;
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        @media (min-width: 768px) {
+            .stat-value {
+                font-size: 4rem;
+            }
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .features {
+                padding: 10rem 0;
+            }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            letter-spacing: -0.025em;
+        }
+
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 4rem;
+                margin-bottom: 6rem;
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background: var(--background);
+            padding: 2rem;
+            transition: all 100ms;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--foreground);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: all 100ms;
+        }
+
+        .feature-card:hover .feature-icon {
+            border-color: var(--background);
+            color: var(--background);
+        }
+
+        .feature-icon-text {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            line-height: 1.625;
+            opacity: 0.8;
+        }
+
+        /* Process */
+        .process {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .process::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 40px,
+                #00000008 40px,
+                #00000008 42px
+            );
+            opacity: 0.01;
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .process {
+                padding: 10rem 0;
+            }
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .process-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .process-step {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 600ms, transform 600ms;
+        }
+
+        .process-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .process-number {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.2;
+        }
+
+        .process-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .process-description {
+            font-size: 0.875rem;
+            line-height: 1.625;
+            color: var(--muted-foreground);
+        }
+
+        /* Benefits */
+        .benefits {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .benefits::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(#00000008 1px, transparent 1px),
+                linear-gradient(90deg, #00000008 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .benefits {
+                padding: 10rem 0;
+            }
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .benefit-item {
+            padding: 2rem 0;
+            border-top: 2px solid var(--border);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 600ms, transform 600ms;
+        }
+
+        .benefit-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .benefit-item:last-child {
+            border-bottom: 2px solid var(--border);
+        }
+
+        .benefit-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .benefit-description {
+            font-size: 0.875rem;
+            line-height: 1.625;
+            color: var(--muted-foreground);
+        }
+
+        /* Blog */
+        .blog {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .blog {
+                padding: 10rem 0;
+            }
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            text-decoration: none;
+            color: var(--foreground);
+            display: block;
+            transition: all 100ms;
+            cursor: pointer;
+            group: hover;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 300px;
+            background: var(--muted);
+            border: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 100ms;
+        }
+
+        .blog-card:hover .blog-image {
+            border-width: 4px;
+        }
+
+        .blog-image-inner {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 3rem;
+            font-weight: 700;
+            filter: grayscale(100%);
+            transition: all 300ms;
+        }
+
+        .blog-card:hover .blog-image-inner {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .blog-meta {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--muted);
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials {
+                padding: 10rem 0;
+            }
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .testimonial-card {
+            background: var(--background);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 100ms;
+            cursor: pointer;
+        }
+
+        .testimonial-card:hover {
+            border-bottom-width: 3px;
+        }
+
+        .testimonial-quote-mark {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 4rem;
+            line-height: 1;
+            opacity: 0.1;
+            margin-bottom: 1rem;
+            transition: opacity 100ms;
+        }
+
+        .testimonial-card:hover .testimonial-quote-mark {
+            opacity: 0.2;
+        }
+
+        .testimonial-text {
+            font-size: 0.875rem;
+            line-height: 1.625;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-top: 0.25rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .pricing {
+                padding: 10rem 0;
+            }
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+                align-items: start;
+            }
+        }
+
+        .pricing-card {
+            background: var(--background);
+            border: 2px solid var(--border);
+            padding: 2rem;
+            transition: all 100ms;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-card.featured {
+                transform: translateY(-2rem);
+                padding: 3rem 2rem;
+            }
+        }
+
+        .pricing-card:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
+
+        .pricing-card:hover .pricing-features {
+            color: var(--background);
+        }
+
+        .pricing-name {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .pricing-price {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .pricing-period {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card:hover .pricing-period {
+            color: var(--background);
+            opacity: 0.8;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .pricing-card:hover .pricing-features {
+            border-top-color: var(--background);
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .pricing-cta {
+            width: 100%;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 6rem 0;
+            background: var(--muted);
+        }
+
+        @media (min-width: 768px) {
+            .faq {
+                padding: 10rem 0;
+            }
+        }
+
+        .faq-list {
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 1.5rem 0;
+            background: none;
+            border: none;
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 100ms;
+        }
+
+        .faq-question:hover {
+            opacity: 0.7;
+        }
+
+        .faq-question:focus-visible {
+            outline: 3px solid var(--foreground);
+            outline-offset: 2px;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            transition: transform 200ms;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 300ms;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding-bottom: 1.5rem;
+            font-size: 0.875rem;
+            line-height: 1.625;
+            color: var(--muted-foreground);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--foreground);
+            color: var(--background);
+            padding: 8rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(
+                circle at top center,
+                rgba(255, 255, 255, 0.05),
+                transparent 70%
+            );
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .final-cta {
+                padding: 10rem 0;
+            }
+        }
+
+        .final-cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            letter-spacing: -0.025em;
+        }
+
+        @media (min-width: 768px) {
+            .final-cta-title {
+                font-size: 4rem;
+            }
+        }
+
+        .final-cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 36rem;
+            margin: 0 auto;
+            flex-direction: column;
+        }
+
+        @media (min-width: 640px) {
+            .final-cta-form {
+                flex-direction: row;
+            }
+        }
+
+        .final-cta-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-bottom: 2px solid var(--background);
+            background: transparent;
+            color: var(--background);
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-width 100ms;
+        }
+
+        .final-cta-input::placeholder {
+            color: var(--background);
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        .final-cta-input:focus {
+            border-bottom-width: 4px;
+        }
+
+        .final-cta-input:focus-visible {
+            border-bottom-width: 4px;
+            outline: none;
+        }
+
+        .final-cta-button {
+            background: var(--background);
+            color: var(--foreground);
+            border: 2px solid var(--background);
+            padding: 1rem 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: none;
+            font-family: "Source Serif 4", Georgia, serif;
+        }
+
+        .final-cta-button:hover {
+            background: transparent;
+            color: var(--background);
+        }
+
+        .final-cta-button:focus-visible {
+            outline: 3px solid var(--background);
+            outline-offset: 3px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--foreground);
+            color: var(--background);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-logo {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--background);
+            text-decoration: none;
+            font-size: 0.875rem;
+            opacity: 0.8;
+            transition: opacity 100ms;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            border-bottom-color: var(--background);
+        }
+
+        .footer-links a:focus-visible {
+            outline: 3px solid var(--background);
+            outline-offset: 2px;
+            border-bottom-color: transparent;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--background);
+            text-align: center;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            letter-spacing: 0.05em;
+        }
+
+        /* Design System Badge */
+        .ds-badge {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--foreground);
+            color: var(--background);
+            padding: 0.5rem 1rem;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 2px solid var(--foreground);
+            z-index: 1000;
+            transition: all 100ms;
+        }
+
+        .ds-badge:hover {
+            background: var(--background);
+            color: var(--foreground);
+        }
+
+        /* Utilities */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">ACME</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <a href="#final-cta" class="btn">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-label">Est. 2024</div>
+            <h1 class="hero-headline">Build better. Ship faster.</h1>
+            <p class="hero-subtext">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+            <div class="hero-cta">
+                <a href="#final-cta" class="btn">Start Project</a>
+                <a href="#process" class="btn btn-secondary">Our Process</a>
+            </div>
+            <div class="hero-decoration">
+                <div class="hero-decoration-line"></div>
+                <div class="hero-decoration-square"></div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-visual-text">ACME</div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">147+</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Client Retention</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">3.2x</div>
+                    <div class="stat-label">Avg. ROI Increase</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24h</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">What We Do</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="feature-icon-text">St</span>
+                    </div>
+                    <h3 class="feature-title">Strategy</h3>
+                    <p class="feature-description">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="feature-icon-text">Ds</span>
+                    </div>
+                    <h3 class="feature-title">Design Systems</h3>
+                    <p class="feature-description">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="feature-icon-text">Ux</span>
+                    </div>
+                    <h3 class="feature-title">UX Research</h3>
+                    <p class="feature-description">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="feature-icon-text">Dv</span>
+                    </div>
+                    <h3 class="feature-title">Development</h3>
+                    <p class="feature-description">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="feature-icon-text">An</span>
+                    </div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-description">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="feature-icon-text">Sc</span>
+                    </div>
+                    <h3 class="feature-title">Scale</h3>
+                    <p class="feature-description">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="process" class="process">
+        <div class="container">
+            <h2 class="section-title">Our Process</h2>
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="process-number">01</div>
+                    <h3 class="process-title">Discovery</h3>
+                    <p class="process-description">Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">02</div>
+                    <h3 class="process-title">Define</h3>
+                    <p class="process-description">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">03</div>
+                    <h3 class="process-title">Develop</h3>
+                    <p class="process-description">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">04</div>
+                    <h3 class="process-title">Deliver</h3>
+                    <p class="process-description">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Why Choose Us</h2>
+            <ul class="benefits-list">
+                <li class="benefit-item">
+                    <h3 class="benefit-title">End-to-end ownership</h3>
+                    <p class="benefit-description">One team from strategy through launch. No handoff gaps, no context loss.</p>
+                </li>
+                <li class="benefit-item">
+                    <h3 class="benefit-title">Transparent pricing</h3>
+                    <p class="benefit-description">Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                </li>
+                <li class="benefit-item">
+                    <h3 class="benefit-title">Senior-only teams</h3>
+                    <p class="benefit-description">Every member has 8+ years of experience. No juniors learning on your project.</p>
+                </li>
+                <li class="benefit-item">
+                    <h3 class="benefit-title">Production-grade code</h3>
+                    <p class="benefit-description">Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                </li>
+                <li class="benefit-item">
+                    <h3 class="benefit-title">Async-first culture</h3>
+                    <p class="benefit-description">Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <h2 class="section-title">Latest Insights</h2>
+            <div class="blog-grid">
+                <a href="#" class="blog-card">
+                    <div class="blog-image">
+                        <div class="blog-image-inner">01</div>
+                    </div>
+                    <div class="blog-meta">Design · Mar 2024</div>
+                    <h3 class="blog-title">Design Systems at Scale: Lessons from 50 Projects</h3>
+                </a>
+                <a href="#" class="blog-card">
+                    <div class="blog-image">
+                        <div class="blog-image-inner">02</div>
+                    </div>
+                    <div class="blog-meta">Engineering · Feb 2024</div>
+                    <h3 class="blog-title">The Case for Boring Technology in 2024</h3>
+                </a>
+                <a href="#" class="blog-card">
+                    <div class="blog-image">
+                        <div class="blog-image-inner">03</div>
+                    </div>
+                    <div class="blog-meta">Strategy · Jan 2024</div>
+                    <h3 class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Clients Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-mark">"</div>
+                    <p class="testimonial-text">Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires.</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-mark">"</div>
+                    <p class="testimonial-text">The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment.</p>
+                    <div class="testimonial-author">Marcus Rivera</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-mark">"</div>
+                    <p class="testimonial-text">They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it.</p>
+                    <div class="testimonial-author">Aisha Kamau</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-price">$4,900</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <button class="btn btn-secondary pricing-cta">Get Started</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-name">Professional</div>
+                    <div class="pricing-price">$9,900</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <button class="btn pricing-cta">Get Started</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">contact us</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <button class="btn btn-secondary pricing-cta">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How long does a typical project take?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Most projects run 8–16 weeks depending on scope.</div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What technologies do you work with?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Can you work with our existing team?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Absolutely. We embed seamlessly into existing workflows.</div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What does your pricing include?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Everything: strategy, design, development, QA, and deployment.</div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Do you offer ongoing support?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Yes. After launch, we offer retainer-based support packages.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="final-cta" class="final-cta">
+        <div class="container">
+            <h2 class="final-cta-title">Ready to build something great?</h2>
+            <form class="final-cta-form">
+                <input type="email" class="final-cta-input" placeholder="your@email.com" required>
+                <button type="submit" class="final-cta-button">Let's Talk →</button>
+            </form>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">ACME</div>
+                </div>
+                <div class="footer-column">
+                    <h3>Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2024 ACME INC.
+            </div>
+        </div>
+    </footer>
+
+    <div class="ds-badge">Monochrome</div>
+
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                    faqItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                });
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                    button.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.process-step, .benefit-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

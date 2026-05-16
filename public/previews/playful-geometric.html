@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME - Playful Geometric Design System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: #FFFDF5;
+            --foreground: #1E293B;
+            --muted: #F1F5F9;
+            --muted-foreground: #64748B;
+            --accent: #8B5CF6;
+            --accent-foreground: #FFFFFF;
+            --secondary: #F472B6;
+            --tertiary: #FBBF24;
+            --quaternary: #34D399;
+            --border: #E2E8F0;
+            --input: #FFFFFF;
+            --card: #FFFFFF;
+            --ring: #8B5CF6;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', system-ui, sans-serif;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.8rem; }
+        h3 { font-size: 2rem; }
+        h4 { font-size: 1.6rem; }
+        h5 { font-size: 1.25rem; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.5rem; }
+        }
+
+        .container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--background);
+            border-bottom: 2px solid var(--foreground);
+            z-index: 1000;
+            box-shadow: 4px 4px 0px var(--foreground);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--foreground);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--foreground);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 2rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: 2px solid var(--foreground);
+            box-shadow: 4px 4px 0px var(--foreground);
+        }
+
+        .btn-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--foreground);
+        }
+
+        .btn-primary:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--foreground);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--foreground);
+            border: 2px solid var(--foreground);
+        }
+
+        .btn-secondary:hover {
+            background: var(--tertiary);
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 6rem 0;
+            overflow: hidden;
+        }
+
+        .hero-bg-circle {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--tertiary);
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+            .hero-bg-circle {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        .hero-label {
+            display: inline-block;
+            background: var(--foreground);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            border-radius: 24px;
+            border: 2px solid var(--foreground);
+            box-shadow: 8px 8px 0px var(--foreground);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-radius: 24px;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 0;
+            background: var(--muted);
+            border-top: 2px solid var(--foreground);
+            border-bottom: 2px solid var(--foreground);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--muted-foreground);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--muted-foreground);
+            font-size: 1.125rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 2px solid var(--foreground);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 8px 8px 0px var(--border);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .feature-card:hover {
+            transform: rotate(-1deg) scale(1.02);
+        }
+
+        .feature-card:nth-child(1) { box-shadow: 8px 8px 0px var(--accent); }
+        .feature-card:nth-child(2) { box-shadow: 8px 8px 0px var(--secondary); }
+        .feature-card:nth-child(3) { box-shadow: 8px 8px 0px var(--tertiary); }
+        .feature-card:nth-child(4) { box-shadow: 8px 8px 0px var(--quaternary); }
+        .feature-card:nth-child(5) { box-shadow: 8px 8px 0px var(--accent); }
+        .feature-card:nth-child(6) { box-shadow: 8px 8px 0px var(--secondary); }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--foreground);
+        }
+
+        .feature-card:nth-child(1) .feature-icon { background: var(--accent); }
+        .feature-card:nth-child(2) .feature-icon { background: var(--secondary); }
+        .feature-card:nth-child(3) .feature-icon { background: var(--tertiary); color: var(--foreground); }
+        .feature-card:nth-child(4) .feature-icon { background: var(--quaternary); }
+        .feature-card:nth-child(5) .feature-icon { background: var(--accent); }
+        .feature-card:nth-child(6) .feature-icon { background: var(--secondary); }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--muted-foreground);
+            font-weight: 500;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 6rem 0;
+            background: var(--muted);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .process-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--foreground);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 4px 4px 0px var(--accent);
+        }
+
+        .process-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .process-description {
+            color: var(--muted-foreground);
+            font-size: 0.9375rem;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 6rem 0;
+        }
+
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            background: var(--card);
+            border: 2px solid var(--foreground);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            box-shadow: 4px 4px 0px var(--foreground);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 6px 6px 0px var(--foreground);
+        }
+
+        .benefit-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-item:nth-child(2) .benefit-number { background: var(--secondary); }
+        .benefit-item:nth-child(3) .benefit-number { background: var(--tertiary); color: var(--foreground); }
+        .benefit-item:nth-child(4) .benefit-number { background: var(--quaternary); }
+        .benefit-item:nth-child(5) .benefit-number { background: var(--accent); }
+
+        .benefit-content h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-content p {
+            color: var(--muted-foreground);
+        }
+
+        /* Blog Section */
+        .blog {
+            padding: 6rem 0;
+            background: var(--muted);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .blog-card {
+            background: var(--card);
+            border: 2px solid var(--foreground);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 6px 6px 0px var(--foreground);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 8px 8px 0px var(--foreground);
+        }
+
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            position: relative;
+        }
+
+        .blog-card:nth-child(2) .blog-image {
+            background: linear-gradient(135deg, var(--secondary), var(--tertiary));
+        }
+
+        .blog-card:nth-child(3) .blog-image {
+            background: linear-gradient(135deg, var(--tertiary), var(--quaternary));
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .blog-category {
+            color: var(--accent);
+        }
+
+        .blog-date {
+            color: var(--muted-foreground);
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            margin-bottom: 0;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 6rem 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .testimonial-card {
+            background: var(--card);
+            border: 2px solid var(--foreground);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 8px 8px 0px var(--border);
+            position: relative;
+        }
+
+        .testimonial-card:nth-child(1) { box-shadow: 8px 8px 0px var(--accent); }
+        .testimonial-card:nth-child(2) { box-shadow: 8px 8px 0px var(--secondary); }
+        .testimonial-card:nth-child(3) { box-shadow: 8px 8px 0px var(--tertiary); }
+
+        .testimonial-quote {
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 0;
+            background: var(--muted);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border: 2px solid var(--foreground);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 6px 6px 0px var(--foreground);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+            box-shadow: 8px 8px 0px var(--accent);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--tertiary);
+            color: var(--foreground);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            border: 2px solid var(--foreground);
+            box-shadow: 4px 4px 0px var(--foreground);
+            transform: rotate(15deg);
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-period {
+            color: var(--muted-foreground);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--quaternary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 6rem 0;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card);
+            border: 2px solid var(--foreground);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 4px 4px 0px var(--foreground);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            text-align: left;
+            background: none;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--foreground);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: var(--muted);
+        }
+
+        .faq-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--muted-foreground);
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 0;
+            background: var(--accent);
+            border-top: 2px solid var(--foreground);
+            border-bottom: 2px solid var(--foreground);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .cta-form {
+                flex-direction: column;
+            }
+        }
+
+        .cta-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--foreground);
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: white;
+            box-shadow: 4px 4px 0px var(--foreground);
+            transition: all 0.3s;
+        }
+
+        .cta-input:focus {
+            outline: none;
+            box-shadow: 4px 4px 0px var(--foreground);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            background: var(--foreground);
+            color: white;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .footer-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column h5 {
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--tertiary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        /* Design System Badge */
+        .design-badge {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--foreground);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            box-shadow: 4px 4px 0px var(--tertiary);
+            z-index: 1000;
+            border: 2px solid var(--tertiary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
+        }
+
+        .reveal {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Decorative Elements */
+        .floating-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .shape-triangle {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 86px solid;
+            opacity: 0.3;
+        }
+
+        .shape-square {
+            width: 80px;
+            height: 80px;
+            transform: rotate(45deg);
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">ACME</a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#process">Process</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#cta" class="btn btn-primary">Get Started</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg-circle"></div>
+        <div class="floating-shape shape-circle" style="background: var(--secondary); top: 200px; right: 100px; width: 60px; height: 60px;"></div>
+        <div class="floating-shape shape-triangle" style="border-bottom-color: var(--quaternary); bottom: 100px; left: 150px;"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div>
+                    <span class="hero-label">Est. 2024</span>
+                    <h1 class="reveal">Build better. Ship faster.</h1>
+                    <p class="hero-subtext reveal" style="animation-delay: 0.1s;">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                    <div class="hero-buttons reveal" style="animation-delay: 0.2s;">
+                        <a href="#cta" class="btn btn-primary">
+                            Start Project
+                            <span class="btn-icon">→</span>
+                        </a>
+                        <a href="#process" class="btn btn-secondary">Our Process</a>
+                    </div>
+                </div>
+                <div class="hero-visual reveal" style="animation-delay: 0.3s;">
+                    ACME
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item reveal">
+                    <span class="stat-value">147+</span>
+                    <span class="stat-label">Projects Delivered</span>
+                </div>
+                <div class="stat-item reveal" style="animation-delay: 0.1s;">
+                    <span class="stat-value">98%</span>
+                    <span class="stat-label">Client Retention</span>
+                </div>
+                <div class="stat-item reveal" style="animation-delay: 0.2s;">
+                    <span class="stat-value">3.2x</span>
+                    <span class="stat-label">Avg. ROI Increase</span>
+                </div>
+                <div class="stat-item reveal" style="animation-delay: 0.3s;">
+                    <span class="stat-value">24h</span>
+                    <span class="stat-label">Response Time</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="floating-shape shape-square" style="background: var(--tertiary); top: 50px; right: 50px;"></div>
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">Everything you need</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">Comprehensive services for modern digital products</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal" style="animation-delay: 0.1s;">
+                    <div class="feature-icon">St</div>
+                    <h3 class="feature-title">Strategy</h3>
+                    <p class="feature-description">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                </div>
+                <div class="feature-card reveal" style="animation-delay: 0.2s;">
+                    <div class="feature-icon">Ds</div>
+                    <h3 class="feature-title">Design Systems</h3>
+                    <p class="feature-description">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                </div>
+                <div class="feature-card reveal" style="animation-delay: 0.3s;">
+                    <div class="feature-icon">Ux</div>
+                    <h3 class="feature-title">UX Research</h3>
+                    <p class="feature-description">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                </div>
+                <div class="feature-card reveal" style="animation-delay: 0.4s;">
+                    <div class="feature-icon">Dv</div>
+                    <h3 class="feature-title">Development</h3>
+                    <p class="feature-description">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                </div>
+                <div class="feature-card reveal" style="animation-delay: 0.5s;">
+                    <div class="feature-icon">An</div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-description">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                </div>
+                <div class="feature-card reveal" style="animation-delay: 0.6s;">
+                    <div class="feature-icon">Sc</div>
+                    <h3 class="feature-title">Scale</h3>
+                    <p class="feature-description">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">Our Process</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">Four phases from concept to launch</p>
+            </div>
+            <div class="process-grid">
+                <div class="process-step reveal" style="animation-delay: 0.1s;">
+                    <div class="process-number">1</div>
+                    <h3 class="process-title">Discovery</h3>
+                    <p class="process-description">Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step reveal" style="animation-delay: 0.2s;">
+                    <div class="process-number">2</div>
+                    <h3 class="process-title">Define</h3>
+                    <p class="process-description">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step reveal" style="animation-delay: 0.3s;">
+                    <div class="process-number">3</div>
+                    <h3 class="process-title">Develop</h3>
+                    <p class="process-description">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step reveal" style="animation-delay: 0.4s;">
+                    <div class="process-number">4</div>
+                    <h3 class="process-title">Deliver</h3>
+                    <p class="process-description">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">Why choose us</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">We're different, and it shows</p>
+            </div>
+            <div class="benefits-list">
+                <div class="benefit-item reveal" style="animation-delay: 0.1s;">
+                    <div class="benefit-number">1</div>
+                    <div class="benefit-content">
+                        <h4>End-to-end ownership</h4>
+                        <p>One team from strategy through launch. No handoff gaps, no context loss.</p>
+                    </div>
+                </div>
+                <div class="benefit-item reveal" style="animation-delay: 0.2s;">
+                    <div class="benefit-number">2</div>
+                    <div class="benefit-content">
+                        <h4>Transparent pricing</h4>
+                        <p>Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                    </div>
+                </div>
+                <div class="benefit-item reveal" style="animation-delay: 0.3s;">
+                    <div class="benefit-number">3</div>
+                    <div class="benefit-content">
+                        <h4>Senior-only teams</h4>
+                        <p>Every member has 8+ years of experience. No juniors learning on your project.</p>
+                    </div>
+                </div>
+                <div class="benefit-item reveal" style="animation-delay: 0.4s;">
+                    <div class="benefit-number">4</div>
+                    <div class="benefit-content">
+                        <h4>Production-grade code</h4>
+                        <p>Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                    </div>
+                </div>
+                <div class="benefit-item reveal" style="animation-delay: 0.5s;">
+                    <div class="benefit-number">5</div>
+                    <div class="benefit-content">
+                        <h4>Async-first culture</h4>
+                        <p>Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">Latest insights</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">Thoughts on design, engineering, and strategy</p>
+            </div>
+            <div class="blog-grid">
+                <article class="blog-card reveal" style="animation-delay: 0.1s;">
+                    <div class="blog-image"></div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Design</span>
+                            <span class="blog-date">MAR 2024</span>
+                        </div>
+                        <h3 class="blog-title">Design Systems at Scale: Lessons from 50 Projects</h3>
+                    </div>
+                </article>
+                <article class="blog-card reveal" style="animation-delay: 0.2s;">
+                    <div class="blog-image"></div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Engineering</span>
+                            <span class="blog-date">FEB 2024</span>
+                        </div>
+                        <h3 class="blog-title">The Case for Boring Technology in 2024</h3>
+                    </div>
+                </article>
+                <article class="blog-card reveal" style="animation-delay: 0.3s;">
+                    <div class="blog-image"></div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Strategy</span>
+                            <span class="blog-date">JAN 2024</span>
+                        </div>
+                        <h3 class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">What clients say</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">Real feedback from real partnerships</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal" style="animation-delay: 0.1s;">
+                    <p class="testimonial-quote">"Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card reveal" style="animation-delay: 0.2s;">
+                    <p class="testimonial-quote">"The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."</p>
+                    <div class="testimonial-author">Marcus Rivera</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card reveal" style="animation-delay: 0.3s;">
+                    <p class="testimonial-quote">"They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."</p>
+                    <div class="testimonial-author">Aisha Kamau</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="floating-shape shape-circle" style="background: var(--secondary); top: 100px; left: 50px; width: 80px; height: 80px;"></div>
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">Simple pricing</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">Choose the plan that fits your needs</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card reveal" style="animation-delay: 0.1s;">
+                    <h3 class="pricing-title">Starter</h3>
+                    <div class="pricing-price">$4,900</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card featured reveal" style="animation-delay: 0.2s;">
+                    <h3 class="pricing-title">Professional</h3>
+                    <div class="pricing-price">$9,900</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card reveal" style="animation-delay: 0.3s;">
+                    <h3 class="pricing-title">Enterprise</h3>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">tailored to you</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title reveal">Common questions</h2>
+                <p class="section-subtitle reveal" style="animation-delay: 0.1s;">Everything you need to know</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item reveal" style="animation-delay: 0.1s;">
+                    <button class="faq-question">
+                        <span>How long does a typical project take?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Most projects run 8–16 weeks depending on scope.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="animation-delay: 0.2s;">
+                    <button class="faq-question">
+                        <span>What technologies do you work with?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We're framework-agnostic but most commonly work with React, Next.js, and Node.js.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="animation-delay: 0.3s;">
+                    <button class="faq-question">
+                        <span>Can you work with our existing team?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutely. We embed seamlessly into existing workflows.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="animation-delay: 0.4s;">
+                    <button class="faq-question">
+                        <span>What does your pricing include?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Everything: strategy, design, development, QA, and deployment.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="animation-delay: 0.5s;">
+                    <button class="faq-question">
+                        <span>Do you offer ongoing support?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes. After launch, we offer retainer-based support packages.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="reveal">Ready to build something great?</h2>
+                <form class="cta-form reveal" style="animation-delay: 0.1s;">
+                    <input type="email" class="cta-input" placeholder="your@email.com" required>
+                    <button type="submit" class="btn btn-primary" style="background: var(--foreground); box-shadow: 4px 4px 0px white;">
+                        Let's Talk →
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">ACME</div>
+                    <p style="color: rgba(255, 255, 255, 0.6);">Building better products for ambitious teams.</p>
+                </div>
+                <div class="footer-column">
+                    <h5>Product</h5>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h5>Connect</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2024 ACME INC.
+            </div>
+        </div>
+    </footer>
+
+    <div class="design-badge">
+        Playful Geometric
+    </div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.animation = `fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // CTA Form
+        document.querySelector('.cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thanks for your interest! We\'ll be in touch soon.');
+        });
+
+        // Respect reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.reveal').forEach(el => {
+                el.style.animation = 'none';
+                el.style.opacity = '1';
+            });
+        }
+    </script>
+</body>
+</html>

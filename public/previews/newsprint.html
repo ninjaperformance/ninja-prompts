@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME INC. — Build better. Ship faster.</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=block');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lora', Georgia, serif;
+            background-color: #F9F9F7;
+            color: #111111;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23111111' fill-opacity='0.04' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+            line-height: 1.625;
+        }
+        
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-body { font-family: 'Lora', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .sharp-corners, .sharp-corners * {
+            border-radius: 0px !important;
+        }
+        
+        .newsprint-texture {
+            position: relative;
+        }
+        
+        .newsprint-texture::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(0deg, transparent 98%, rgba(0,0,0,0.02) 100%),
+                linear-gradient(90deg, transparent 98%, rgba(0,0,0,0.02) 100%);
+            background-size: 3px 3px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        .hard-shadow-hover {
+            transition: all 200ms ease-out;
+        }
+        
+        .hard-shadow-hover:hover {
+            box-shadow: 4px 4px 0px 0px #111111;
+            transform: translate(-2px, -2px);
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid transparent;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            text-decoration: none;
+            min-height: 44px;
+        }
+        
+        .btn-primary {
+            background-color: #111111;
+            color: #F9F9F7;
+        }
+        
+        .btn-primary:hover {
+            background-color: #F9F9F7;
+            color: #111111;
+            border-color: #111111;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: #111111;
+            border-color: #111111;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #111111;
+            color: #F9F9F7;
+        }
+        
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background-color: #F9F9F7;
+            border-bottom: 1px solid #111111;
+        }
+        
+        .nav-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #111111;
+            text-decoration: none;
+            transition: color 200ms ease-out;
+        }
+        
+        .nav-link:hover {
+            color: #CC0000;
+        }
+        
+        .hero-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+        }
+        
+        @media (min-width: 640px) {
+            .hero-headline {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-headline {
+                font-size: 8rem;
+            }
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        @media (min-width: 1024px) {
+            .section-title {
+                font-size: 3rem;
+            }
+        }
+        
+        .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+        
+        .card {
+            border: 1px solid #111111;
+            background-color: #F9F9F7;
+            padding: 2rem;
+        }
+        
+        .grid-border {
+            border: 1px solid #111111;
+        }
+        
+        .grid-border-r {
+            border-right: 1px solid #111111;
+        }
+        
+        .grid-border-b {
+            border-bottom: 1px solid #111111;
+        }
+        
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 300ms ease-in-out, opacity 300ms ease-in-out;
+            opacity: 0;
+        }
+        
+        .accordion-content.open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+        }
+        
+        .accordion-content-inner {
+            overflow: hidden;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 600ms ease-out, transform 600ms ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .marquee {
+            overflow: hidden;
+            background-color: #111111;
+            color: #F9F9F7;
+            border-top: 1px solid #111111;
+            border-bottom: 1px solid #111111;
+        }
+        
+        .marquee-content {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .icon-box {
+            width: 3rem;
+            height: 3rem;
+            border: 1px solid #111111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 200ms ease-out;
+        }
+        
+        .icon-box:hover {
+            background-color: #111111;
+            color: #F9F9F7;
+        }
+        
+        .drop-cap::first-letter {
+            float: left;
+            font-size: 5rem;
+            line-height: 0.8;
+            font-weight: 900;
+            margin-right: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .image-placeholder {
+            background: radial-gradient(#111111 1px, transparent 1px);
+            background-size: 16px 16px;
+            opacity: 0.1;
+        }
+        
+        .grayscale-img {
+            filter: grayscale(100%);
+            transition: filter 300ms ease-out;
+        }
+        
+        .grayscale-img:hover {
+            filter: grayscale(0%) sepia(50%);
+        }
+        
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 73px;
+            left: 0;
+            right: 0;
+            background-color: #F9F9F7;
+            border-bottom: 1px solid #111111;
+            z-index: 30;
+        }
+        
+        .mobile-menu.open {
+            display: block;
+        }
+        
+        @media (max-width: 767px) {
+            .grid-border-r {
+                border-right: none;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+        
+        .badge {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: #111111;
+            color: #F9F9F7;
+            padding: 0.5rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid #111111;
+            z-index: 50;
+        }
+        
+        input[type="email"] {
+            border: none;
+            border-bottom: 2px solid #111111;
+            background-color: transparent;
+            padding: 0.75rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: #111111;
+            outline: none;
+            border-radius: 0;
+        }
+        
+        input[type="email"]:focus {
+            background-color: #F0F0F0;
+        }
+        
+        .pricing-featured {
+            border: 4px solid #111111;
+            position: relative;
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            right: 1rem;
+            background-color: #CC0000;
+            color: #F9F9F7;
+            padding: 0.25rem 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .ornament {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #A3A3A3;
+            letter-spacing: 1em;
+            padding: 2rem 0;
+        }
+        
+        .inverted {
+            background-color: #111111;
+            color: #F9F9F7;
+        }
+    </style>
+</head>
+<body class="sharp-corners">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div style="display: flex; align-items: center; justify-content: space-between; height: 72px;">
+                <div style="display: flex; align-items: center; gap: 3rem;">
+                    <a href="#" style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: #111111; text-decoration: none; letter-spacing: 0.1em;">ACME</a>
+                    <nav style="display: none;" id="desktop-nav">
+                        <div style="display: flex; gap: 2rem;">
+                            <a href="#features" class="nav-link">Features</a>
+                            <a href="#process" class="nav-link">Process</a>
+                            <a href="#pricing" class="nav-link">Pricing</a>
+                            <a href="#blog" class="nav-link">Blog</a>
+                            <a href="#faq" class="nav-link">FAQ</a>
+                        </div>
+                    </nav>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <a href="#cta" class="btn btn-primary" style="display: none;" id="desktop-cta">Get Started</a>
+                    <button id="mobile-menu-btn" class="btn" style="display: none; min-width: 44px; padding: 0.75rem;">
+                        <span style="display: block; width: 20px; height: 2px; background: #111111; position: relative;">
+                            <span style="display: block; width: 20px; height: 2px; background: #111111; position: absolute; top: -6px;"></span>
+                            <span style="display: block; width: 20px; height: 2px; background: #111111; position: absolute; top: 6px;"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <nav style="padding: 2rem 1rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#process" class="nav-link">Process</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#cta" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Get Started</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section style="padding: 4rem 0; border-bottom: 1px solid #111111;" class="newsprint-texture">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 3rem;" id="hero-grid">
+                <div style="padding: 2rem 0;">
+                    <div class="label" style="margin-bottom: 2rem; color: #525252;">Vol. 1 | Est. 2024 | Digital Edition</div>
+                    <h1 class="hero-headline" style="margin-bottom: 2rem;">Build better. Ship faster.</h1>
+                    <p class="drop-cap" style="font-size: 1.125rem; line-height: 1.75; max-width: 42rem; margin-bottom: 3rem;">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="#cta" class="btn btn-primary">Start Project</a>
+                        <a href="#process" class="btn btn-secondary">Our Process</a>
+                    </div>
+                </div>
+                <div style="border: 1px solid #111111; min-height: 400px; background-color: #E5E5E0; position: relative; overflow: hidden;">
+                    <div class="image-placeholder" style="position: absolute; inset: 0;"></div>
+                    <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
+                        <div style="font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: #111111; opacity: 0.1;">ACME</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Stats -->
+    <div class="marquee">
+        <div class="marquee-content" style="white-space: nowrap; padding: 1rem 0;">
+            <div style="display: flex; align-items: center; gap: 4rem; padding-right: 4rem;">
+                <span class="label">147+ Projects Delivered</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+                <span class="label">98% Client Retention</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+                <span class="label">3.2x Avg. ROI Increase</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+                <span class="label">24h Response Time</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4rem; padding-right: 4rem;">
+                <span class="label">147+ Projects Delivered</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+                <span class="label">98% Client Retention</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+                <span class="label">3.2x Avg. ROI Increase</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+                <span class="label">24h Response Time</span>
+                <span style="width: 4px; height: 4px; background: #CC0000;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section id="features" style="padding: 4rem 0; border-bottom: 1px solid #111111;">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 3rem;">Services</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0;" id="features-grid">
+                <!-- Feature 1 -->
+                <div class="fade-in" style="border: 1px solid #111111; border-bottom: none; padding: 2rem; transition: background-color 200ms;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="icon-box" style="flex-shrink: 0;">St</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Strategy</h3>
+                            <p style="color: #525252; font-size: 0.875rem;">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="fade-in" style="border: 1px solid #111111; border-bottom: none; padding: 2rem; transition: background-color 200ms;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="icon-box" style="flex-shrink: 0;">Ds</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Design Systems</h3>
+                            <p style="color: #525252; font-size: 0.875rem;">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="fade-in" style="border: 1px solid #111111; border-bottom: none; padding: 2rem; transition: background-color 200ms;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="icon-box" style="flex-shrink: 0;">Ux</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">UX Research</h3>
+                            <p style="color: #525252; font-size: 0.875rem;">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 4 -->
+                <div class="fade-in" style="border: 1px solid #111111; border-bottom: none; padding: 2rem; transition: background-color 200ms;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="icon-box" style="flex-shrink: 0;">Dv</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Development</h3>
+                            <p style="color: #525252; font-size: 0.875rem;">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 5 -->
+                <div class="fade-in" style="border: 1px solid #111111; border-bottom: none; padding: 2rem; transition: background-color 200ms;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="icon-box" style="flex-shrink: 0;">An</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Analytics</h3>
+                            <p style="color: #525252; font-size: 0.875rem;">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 6 -->
+                <div class="fade-in" style="border: 1px solid #111111; padding: 2rem; transition: background-color 200ms;">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                        <div class="icon-box" style="flex-shrink: 0;">Sc</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Scale</h3>
+                            <p style="color: #525252; font-size: 0.875rem;">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ornament -->
+    <div class="ornament">
+        &#x2727; &#x2727; &#x2727;
+    </div>
+
+    <!-- Process (Inverted) -->
+    <section id="process" class="inverted" style="padding: 4rem 0; border-top: 4px solid #111111; border-bottom: 4px solid #111111;">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 3rem; color: #F9F9F7;">How We Work</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0;" id="process-grid">
+                <!-- Step 1 -->
+                <div class="fade-in" style="border-top: 1px solid #F9F9F7; padding: 2rem 0;">
+                    <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                        <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: #CC0000; flex-shrink: 0;">01</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.875rem; font-weight: 700; margin-bottom: 0.75rem; color: #F9F9F7;">Discovery</h3>
+                            <p style="color: #A3A3A3; font-size: 0.875rem;">Deep dive into your business goals, user needs, and technical landscape.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="fade-in" style="border-top: 1px solid #F9F9F7; padding: 2rem 0;">
+                    <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                        <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: #CC0000; flex-shrink: 0;">02</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.875rem; font-weight: 700; margin-bottom: 0.75rem; color: #F9F9F7;">Define</h3>
+                            <p style="color: #A3A3A3; font-size: 0.875rem;">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="fade-in" style="border-top: 1px solid #F9F9F7; padding: 2rem 0;">
+                    <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                        <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: #CC0000; flex-shrink: 0;">03</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.875rem; font-weight: 700; margin-bottom: 0.75rem; color: #F9F9F7;">Develop</h3>
+                            <p style="color: #A3A3A3; font-size: 0.875rem;">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="fade-in" style="border-top: 1px solid #F9F9F7; border-bottom: 1px solid #F9F9F7; padding: 2rem 0;">
+                    <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                        <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: #CC0000; flex-shrink: 0;">04</div>
+                        <div>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.875rem; font-weight: 700; margin-bottom: 0.75rem; color: #F9F9F7;">Deliver</h3>
+                            <p style="color: #A3A3A3; font-size: 0.875rem;">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section style="padding: 4rem 0; border-bottom: 1px solid #111111;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 3rem;" id="benefits-grid">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">Why Choose ACME</h2>
+                    <p style="font-size: 1.125rem; color: #525252; max-width: 32rem;">Five principles that separate us from typical agencies and consultancies.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0;">
+                    <!-- Benefit 1 -->
+                    <div class="fade-in" style="border-top: 1px solid #111111; padding: 2rem 0;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">End-to-end ownership</h3>
+                        <p style="color: #525252; font-size: 0.875rem;">One team from strategy through launch. No handoff gaps, no context loss.</p>
+                    </div>
+                    <!-- Benefit 2 -->
+                    <div class="fade-in" style="border-top: 1px solid #111111; padding: 2rem 0;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Transparent pricing</h3>
+                        <p style="color: #525252; font-size: 0.875rem;">Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                    </div>
+                    <!-- Benefit 3 -->
+                    <div class="fade-in" style="border-top: 1px solid #111111; padding: 2rem 0;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Senior-only teams</h3>
+                        <p style="color: #525252; font-size: 0.875rem;">Every member has 8+ years of experience. No juniors learning on your project.</p>
+                    </div>
+                    <!-- Benefit 4 -->
+                    <div class="fade-in" style="border-top: 1px solid #111111; padding: 2rem 0;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Production-grade code</h3>
+                        <p style="color: #525252; font-size: 0.875rem;">Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                    </div>
+                    <!-- Benefit 5 -->
+                    <div class="fade-in" style="border-top: 1px solid #111111; border-bottom: 1px solid #111111; padding: 2rem 0;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Async-first culture</h3>
+                        <p style="color: #525252; font-size: 0.875rem;">Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog -->
+    <section id="blog" style="padding: 4rem 0; border-bottom: 1px solid #111111;">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 3rem;">Latest Articles</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" id="blog-grid">
+                <!-- Article 1 -->
+                <article class="fade-in hard-shadow-hover" style="border: 1px solid #111111; overflow: hidden; cursor: pointer;">
+                    <div style="height: 240px; background-color: #E5E5E0; position: relative; overflow: hidden;">
+                        <div class="image-placeholder grayscale-img" style="position: absolute; inset: 0; transition: transform 300ms;"></div>
+                    </div>
+                    <div style="padding: 2rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <span class="label" style="color: #CC0000;">Design</span>
+                            <span class="label" style="color: #737373;">MAR 2024</span>
+                        </div>
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Design Systems at Scale: Lessons from 50 Projects</h3>
+                    </div>
+                </article>
+                <!-- Article 2 -->
+                <article class="fade-in hard-shadow-hover" style="border: 1px solid #111111; overflow: hidden; cursor: pointer;">
+                    <div style="height: 240px; background-color: #E5E5E0; position: relative; overflow: hidden;">
+                        <div class="image-placeholder grayscale-img" style="position: absolute; inset: 0; transition: transform 300ms;"></div>
+                    </div>
+                    <div style="padding: 2rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <span class="label" style="color: #CC0000;">Engineering</span>
+                            <span class="label" style="color: #737373;">FEB 2024</span>
+                        </div>
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">The Case for Boring Technology in 2024</h3>
+                    </div>
+                </article>
+                <!-- Article 3 -->
+                <article class="fade-in hard-shadow-hover" style="border: 1px solid #111111; overflow: hidden; cursor: pointer;">
+                    <div style="height: 240px; background-color: #E5E5E0; position: relative; overflow: hidden;">
+                        <div class="image-placeholder grayscale-img" style="position: absolute; inset: 0; transition: transform 300ms;"></div>
+                    </div>
+                    <div style="padding: 2rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <span class="label" style="color: #CC0000;">Strategy</span>
+                            <span class="label" style="color: #737373;">JAN 2024</span>
+                        </div>
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section style="padding: 4rem 0; border-bottom: 1px solid #111111; background-color: #F5F5F5;">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 3rem;">Client Testimonials</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0;" id="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="fade-in" style="border-top: 1px solid #111111; padding: 2rem 0;">
+                    <blockquote style="font-size: 1.125rem; line-height: 1.75; margin-bottom: 1.5rem; font-style: italic;">
+                        "Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."
+                    </blockquote>
+                    <div>
+                        <div style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.875rem;">Sarah Chen</div>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 0.75rem; color: #737373; text-transform: uppercase; letter-spacing: 0.1em;">CTO at Vertex</div>
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="fade-in" style="border-top: 1px solid #111111; padding: 2rem 0;">
+                    <blockquote style="font-size: 1.125rem; line-height: 1.75; margin-bottom: 1.5rem; font-style: italic;">
+                        "The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."
+                    </blockquote>
+                    <div>
+                        <div style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.875rem;">Marcus Rivera</div>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 0.75rem; color: #737373; text-transform: uppercase; letter-spacing: 0.1em;">VP Product at Helix</div>
+                    </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="fade-in" style="border-top: 1px solid #111111; border-bottom: 1px solid #111111; padding: 2rem 0;">
+                    <blockquote style="font-size: 1.125rem; line-height: 1.75; margin-bottom: 1.5rem; font-style: italic;">
+                        "They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."
+                    </blockquote>
+                    <div>
+                        <div style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.875rem;">Aisha Kamau</div>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 0.75rem; color: #737373; text-transform: uppercase; letter-spacing: 0.1em;">Founder at Prism</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" style="padding: 4rem 0; border-bottom: 1px solid #111111;">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 3rem; text-align: center;">Pricing Plans</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto;" id="pricing-grid">
+                <!-- Starter -->
+                <div class="fade-in card">
+                    <div class="label" style="margin-bottom: 1rem; color: #737373;">Starter</div>
+                    <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; margin-bottom: 2rem;">$4,900<span style="font-size: 1rem; font-weight: 400; color: #737373;">/mo</span></div>
+                    <ul style="list-style: none; margin-bottom: 2rem;">
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">1 active project</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">2 revision rounds</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">48h response time</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">Weekly reports</li>
+                        <li style="padding: 0.75rem 0; font-size: 0.875rem;">Slack access</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Choose Plan</a>
+                </div>
+                <!-- Professional -->
+                <div class="fade-in pricing-featured" style="background-color: #F9F9F7; padding: 2rem; position: relative;">
+                    <div class="pricing-badge">Featured</div>
+                    <div class="label" style="margin-bottom: 1rem; color: #737373;">Professional</div>
+                    <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; margin-bottom: 2rem;">$9,900<span style="font-size: 1rem; font-weight: 400; color: #737373;">/mo</span></div>
+                    <ul style="list-style: none; margin-bottom: 2rem;">
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">3 active projects</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">Unlimited revisions</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">24h response time</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">Daily standups</li>
+                        <li style="padding: 0.75rem 0; font-size: 0.875rem;">Dedicated lead</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%;">Choose Plan</a>
+                </div>
+                <!-- Enterprise -->
+                <div class="fade-in card">
+                    <div class="label" style="margin-bottom: 1rem; color: #737373;">Enterprise</div>
+                    <div style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; margin-bottom: 2rem;">Custom</div>
+                    <ul style="list-style: none; margin-bottom: 2rem;">
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">Unlimited projects</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">Unlimited revisions</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">Dedicated team</li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px dashed #E5E5E0; font-size: 0.875rem;">On-site workshops</li>
+                        <li style="padding: 0.75rem 0; font-size: 0.875rem;">SLA guarantee</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" style="padding: 4rem 0; border-bottom: 1px solid #111111;">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 3rem;">Frequently Asked Questions</h2>
+            <div style="max-width: 48rem; margin: 0 auto;">
+                <!-- FAQ 1 -->
+                <div class="fade-in" style="border-top: 1px solid #111111;">
+                    <button class="faq-toggle" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; text-align: left; background: none; border: none; cursor: pointer; min-height: 44px;">
+                        <span>How long does a typical project take?</span>
+                        <span class="faq-icon" style="font-size: 1.5rem; transition: transform 200ms;">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p style="padding-bottom: 1.5rem; color: #525252; font-size: 0.875rem;">Most projects run 8–16 weeks depending on scope.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- FAQ 2 -->
+                <div class="fade-in" style="border-top: 1px solid #111111;">
+                    <button class="faq-toggle" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; text-align: left; background: none; border: none; cursor: pointer; min-height: 44px;">
+                        <span>What technologies do you work with?</span>
+                        <span class="faq-icon" style="font-size: 1.5rem; transition: transform 200ms;">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p style="padding-bottom: 1.5rem; color: #525252; font-size: 0.875rem;">We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- FAQ 3 -->
+                <div class="fade-in" style="border-top: 1px solid #111111;">
+                    <button class="faq-toggle" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; text-align: left; background: none; border: none; cursor: pointer; min-height: 44px;">
+                        <span>Can you work with our existing team?</span>
+                        <span class="faq-icon" style="font-size: 1.5rem; transition: transform 200ms;">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p style="padding-bottom: 1.5rem; color: #525252; font-size: 0.875rem;">Absolutely. We embed seamlessly into existing workflows.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- FAQ 4 -->
+                <div class="fade-in" style="border-top: 1px solid #111111;">
+                    <button class="faq-toggle" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; text-align: left; background: none; border: none; cursor: pointer; min-height: 44px;">
+                        <span>What does your pricing include?</span>
+                        <span class="faq-icon" style="font-size: 1.5rem; transition: transform 200ms;">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p style="padding-bottom: 1.5rem; color: #525252; font-size: 0.875rem;">Everything: strategy, design, development, QA, and deployment.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- FAQ 5 -->
+                <div class="fade-in" style="border-top: 1px solid #111111; border-bottom: 1px solid #111111;">
+                    <button class="faq-toggle" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; text-align: left; background: none; border: none; cursor: pointer; min-height: 44px;">
+                        <span>Do you offer ongoing support?</span>
+                        <span class="faq-icon" style="font-size: 1.5rem; transition: transform 200ms;">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p style="padding-bottom: 1.5rem; color: #525252; font-size: 0.875rem;">Yes. After launch, we offer retainer-based support packages.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="cta" style="padding: 4rem 0; border-bottom: 4px solid #111111; background-color: #F5F5F5;">
+        <div class="container">
+            <div style="max-width: 42rem; margin: 0 auto; text-align: center;">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.25rem; font-weight: 900; margin-bottom: 1.5rem;">Ready to build something great?</h2>
+                <p style="font-size: 1.125rem; color: #525252; margin-bottom: 2rem;">Share your email and let's start the conversation.</p>
+                <form style="display: flex; gap: 1rem; max-width: 32rem; margin: 0 auto; flex-wrap: wrap;">
+                    <input type="email" placeholder="your@email.com" style="flex: 1; min-width: 200px;" required />
+                    <button type="submit" class="btn btn-primary">Let's Talk →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background-color: #F9F9F7; padding: 4rem 0 2rem; border-bottom: 4px solid #111111;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 3rem;" id="footer-grid">
+                <div>
+                    <div style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: 0.1em;">ACME</div>
+                    <p style="color: #737373; font-size: 0.875rem; max-width: 20rem;">Building digital products for ambitious teams since 2024.</p>
+                    <p class="label" style="color: #737373; margin-top: 1rem;">Edition: Vol 1.0 | Printed in NYC</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" id="footer-links-grid">
+                    <div>
+                        <h3 style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Product</h3>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                            <li><a href="#features" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Features</a></li>
+                            <li><a href="#pricing" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Pricing</a></li>
+                            <li><a href="#" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Case Studies</a></li>
+                            <li><a href="#" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Company</h3>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                            <li><a href="#" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">About</a></li>
+                            <li><a href="#blog" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Blog</a></li>
+                            <li><a href="#" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Careers</a></li>
+                            <li><a href="#cta" style="color: #525252; font-size: 0.875rem; text-decoration: none; transition: color 200ms;" class="footer-link">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Connect</h3>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <a href="#" class="icon-box" style="text-decoration: none; font-size: 0.75rem;" aria-label="Twitter">𝕏</a>
+                            <a href="#" class="icon-box" style="text-decoration: none; font-size: 0.75rem;" aria-label="LinkedIn">in</a>
+                            <a href="#" class="icon-box" style="text-decoration: none; font-size: 0.75rem;" aria-label="GitHub">GH</a>
+                            <a href="#" class="icon-box" style="text-decoration: none; font-size: 0.75rem;" aria-label="Dribbble">Db</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #111111; padding-top: 2rem;">
+                <p class="label" style="text-align: center; color: #737373;">© 2024 ACME INC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Design System Badge -->
+    <div class="badge">
+        Newsprint
+    </div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.remove('open');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.faq-icon');
+                const isOpen = content.classList.contains('open');
+                
+                // Close all accordions
+                document.querySelectorAll('.accordion-content').forEach(item => {
+                    item.classList.remove('open');
+                });
+                document.querySelectorAll('.faq-icon').forEach(item => {
+                    item.textContent = '+';
+                    item.style.transform = 'rotate(0deg)';
+                });
+                
+                // Open clicked accordion if it was closed
+                if (!isOpen) {
+                    content.classList.add('open');
+                    icon.textContent = '×';
+                    icon.style.transform = 'rotate(45deg)';
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Blog card hover effect
+        document.querySelectorAll('article').forEach(article => {
+            article.addEventListener('mouseenter', function() {
+                const img = this.querySelector('.grayscale-img');
+                if (img) {
+                    img.style.transform = 'scale(1.05)';
+                }
+            });
+            article.addEventListener('mouseleave', function() {
+                const img = this.querySelector('.grayscale-img');
+                if (img) {
+                    img.style.transform = 'scale(1)';
+                }
+            });
+        });
+
+        // Footer link hover
+        document.querySelectorAll('.footer-link').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.color = '#CC0000';
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.color = '#525252';
+            });
+        });
+
+        // Feature hover
+        document.querySelectorAll('#features-grid > div').forEach(feature => {
+            feature.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#F5F5F5';
+            });
+            feature.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Responsive grid adjustments
+        function updateGrids() {
+            const width = window.innerWidth;
+            
+            // Hero grid
+            const heroGrid = document.getElementById('hero-grid');
+            if (width >= 1024) {
+                heroGrid.style.gridTemplateColumns = '1fr 1fr';
+            } else {
+                heroGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Features grid
+            const featuresGrid = document.getElementById('features-grid');
+            if (width >= 768) {
+                featuresGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else {
+                featuresGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Process grid
+            const processGrid = document.getElementById('process-grid');
+            if (width >= 768) {
+                processGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else {
+                processGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Benefits grid
+            const benefitsGrid = document.getElementById('benefits-grid');
+            if (width >= 1024) {
+                benefitsGrid.style.gridTemplateColumns = '5fr 7fr';
+            } else {
+                benefitsGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Blog grid
+            const blogGrid = document.getElementById('blog-grid');
+            if (width >= 1024) {
+                blogGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            } else if (width >= 768) {
+                blogGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else {
+                blogGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Testimonials grid
+            const testimonialsGrid = document.getElementById('testimonials-grid');
+            if (width >= 768) {
+                testimonialsGrid.style.gridTemplateColumns = '1fr';
+            } else {
+                testimonialsGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Pricing grid
+            const pricingGrid = document.getElementById('pricing-grid');
+            if (width >= 1024) {
+                pricingGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            } else {
+                pricingGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Footer grid
+            const footerGrid = document.getElementById('footer-grid');
+            const footerLinksGrid = document.getElementById('footer-links-grid');
+            if (width >= 1024) {
+                footerGrid.style.gridTemplateColumns = '2fr 3fr';
+                footerLinksGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            } else if (width >= 768) {
+                footerGrid.style.gridTemplateColumns = '1fr';
+                footerLinksGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            } else {
+                footerGrid.style.gridTemplateColumns = '1fr';
+                footerLinksGrid.style.gridTemplateColumns = '1fr';
+            }
+            
+            // Nav display
+            const desktopNav = document.getElementById('desktop-nav');
+            const desktopCta = document.getElementById('desktop-cta');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
+            if (width >= 768) {
+                desktopNav.style.display = 'block';
+                desktopCta.style.display = 'inline-flex';
+                mobileMenuBtn.style.display = 'none';
+            } else {
+                desktopNav.style.display = 'none';
+                desktopCta.style.display = 'none';
+                mobileMenuBtn.style.display = 'flex';
+            }
+        }
+
+        // Initial setup and resize listener
+        updateGrids();
+        window.addEventListener('resize', updateGrids);
+    </script>
+</body>
+</html>

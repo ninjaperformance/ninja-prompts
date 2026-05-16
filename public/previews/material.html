@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME - Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --md-background: #FFFBFE;
+            --md-foreground: #1C1B1F;
+            --md-primary: #6750A4;
+            --md-on-primary: #FFFFFF;
+            --md-secondary-container: #E8DEF8;
+            --md-on-secondary-container: #1D192B;
+            --md-tertiary: #7D5260;
+            --md-surface-container: #F3EDF7;
+            --md-surface-container-low: #E7E0EC;
+            --md-border: #79747E;
+            --md-on-surface-variant: #49454F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--md-foreground);
+            background-color: var(--md-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Typography */
+        .display-large {
+            font-size: 3.5rem;
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .headline-large {
+            font-size: 3rem;
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .headline-medium {
+            font-size: 2rem;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .title-large {
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .body-large {
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .body-medium {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .label-medium {
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            line-height: 1.4;
+        }
+
+        .label-small {
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: rgba(255, 251, 254, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(121, 116, 126, 0.2);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--md-primary);
+        }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--md-foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--md-primary);
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            height: 40px;
+            padding: 0 1.5rem;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(103, 80, 164, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: var(--md-secondary-container);
+            color: var(--md-on-secondary-container);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(232, 222, 248, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outlined {
+            background-color: transparent;
+            border: 1px solid var(--md-border);
+            color: var(--md-primary);
+        }
+
+        .btn-outlined:hover {
+            background-color: rgba(103, 80, 164, 0.05);
+        }
+
+        .btn-large {
+            height: 48px;
+            padding: 0 2rem;
+            font-size: 1rem;
+        }
+
+        /* Hero */
+        .hero {
+            margin-top: 64px;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            background-color: var(--md-surface-container);
+            border-radius: 48px;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .hero-blur-1 {
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(103, 80, 164, 0.3) 0%, transparent 70%);
+            filter: blur(64px);
+            pointer-events: none;
+        }
+
+        .hero-blur-2 {
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(125, 82, 96, 0.2) 0%, transparent 70%);
+            filter: blur(64px);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-label {
+            display: inline-block;
+            background-color: var(--md-secondary-container);
+            color: var(--md-on-secondary-container);
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .hero-visual {
+            margin-top: 3rem;
+            height: 400px;
+            background: linear-gradient(135deg, var(--md-surface-container-low) 0%, var(--md-secondary-container) 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--md-primary);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Stats */
+        .stats {
+            padding: 3rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-card {
+            background-color: var(--md-surface-container);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--md-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-subtitle {
+            color: var(--md-on-surface-variant);
+            margin-top: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background-color: var(--md-surface-container);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background-color: var(--md-secondary-container);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--md-on-secondary-container);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--md-on-surface-variant);
+            line-height: 1.6;
+        }
+
+        /* Process */
+        .process {
+            padding: 6rem 0;
+            background-color: var(--md-surface-container);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .process-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .process-step {
+            position: relative;
+            padding-left: 4rem;
+        }
+
+        .process-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--md-primary) 0%, var(--md-tertiary) 100%);
+            color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .process-step:hover .process-number {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .process-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-description {
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Benefits */
+        .benefits {
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefits-blur-1 {
+            position: absolute;
+            top: 0;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(103, 80, 164, 0.15) 0%, transparent 70%);
+            filter: blur(64px);
+            pointer-events: none;
+        }
+
+        .benefits-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .benefit-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .benefit-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background-color: var(--md-primary);
+            color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-description {
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Blog */
+        .blog {
+            padding: 6rem 0;
+            background-color: var(--md-surface-container);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            background-color: var(--md-background);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--md-primary) 0%, var(--md-tertiary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .blog-card:hover .blog-image {
+            transform: scale(1.05);
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-category {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--md-primary);
+            text-transform: uppercase;
+        }
+
+        .blog-date {
+            font-size: 0.75rem;
+            color: var(--md-on-surface-variant);
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .testimonial-card {
+            background-color: var(--md-surface-container);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .testimonial-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+
+        .testimonial-text {
+            color: var(--md-foreground);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 6rem 0;
+            background-color: var(--md-surface-container);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+                align-items: center;
+            }
+        }
+
+        .pricing-card {
+            background-color: var(--md-background);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .pricing-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured {
+            transform: translateY(-1rem);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border: 2px solid var(--md-primary);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-1.2rem) scale(1.02);
+        }
+
+        .pricing-tier {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--md-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price-unit {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--md-on-surface-variant);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(121, 116, 126, 0.2);
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .pricing-features li:hover {
+            transform: translateX(4px);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 6rem 0;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background-color: var(--md-surface-container);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 2rem;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--md-foreground);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .faq-question:hover {
+            background-color: rgba(103, 80, 164, 0.05);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 2rem;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem 2rem;
+            color: var(--md-on-surface-variant);
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta-blur-1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(103, 80, 164, 0.2) 0%, transparent 70%);
+            filter: blur(64px);
+            pointer-events: none;
+        }
+
+        .final-cta-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background-color: var(--md-surface-container);
+            border-radius: 48px;
+            padding: 4rem 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .cta-form {
+                flex-direction: row;
+            }
+        }
+
+        .cta-input {
+            flex: 1;
+            height: 56px;
+            padding: 0 1.5rem;
+            background-color: var(--md-surface-container-low);
+            border: none;
+            border-bottom: 2px solid var(--md-border);
+            border-radius: 12px 12px 0 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            color: var(--md-foreground);
+            transition: border-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .cta-input:focus {
+            outline: none;
+            border-bottom-color: var(--md-primary);
+        }
+
+        .cta-input::placeholder {
+            color: rgba(28, 27, 31, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--md-surface-container);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--md-primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-column h4 {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--md-on-surface-variant);
+            text-decoration: none;
+            transition: color 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .footer-links a:hover {
+            color: var(--md-primary);
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(121, 116, 126, 0.2);
+            text-align: center;
+            color: var(--md-on-surface-variant);
+            font-size: 0.875rem;
+        }
+
+        /* Badge */
+        .design-badge {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--md-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .design-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.2, 0, 0, 1), transform 0.6s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            .display-large {
+                font-size: 2.5rem;
+            }
+
+            .headline-large {
+                font-size: 2rem;
+            }
+
+            .headline-medium {
+                font-size: 1.5rem;
+            }
+
+            .hero-container {
+                border-radius: 24px;
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-visual {
+                height: 250px;
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: translateY(0);
+            }
+
+            .pricing-card.featured:hover {
+                transform: scale(1.02);
+            }
+
+            .final-cta-container {
+                border-radius: 24px;
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 639px) {
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">ACME</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#cta" class="btn btn-primary">Get Started</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-container">
+                <div class="hero-blur-1"></div>
+                <div class="hero-blur-2"></div>
+                <div class="hero-content">
+                    <div class="hero-label">Est. 2024</div>
+                    <h1 class="display-large">Build better. Ship faster.</h1>
+                    <p class="body-large section-subtitle">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+                    <div class="hero-buttons">
+                        <a href="#cta" class="btn btn-primary btn-large">Start Project</a>
+                        <a href="#process" class="btn btn-secondary btn-large">Our Process</a>
+                    </div>
+                    <div class="hero-visual">ACME</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number">147+</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Client Retention</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number">3.2x</div>
+                    <div class="stat-label">Avg. ROI Increase</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">What We Do</h2>
+                <p class="body-large section-subtitle">Full-spectrum capabilities for digital excellence</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">St</div>
+                    <h3 class="feature-title">Strategy</h3>
+                    <p class="feature-description">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Ds</div>
+                    <h3 class="feature-title">Design Systems</h3>
+                    <p class="feature-description">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Ux</div>
+                    <h3 class="feature-title">UX Research</h3>
+                    <p class="feature-description">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Dv</div>
+                    <h3 class="feature-title">Development</h3>
+                    <p class="feature-description">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">An</div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-description">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">Sc</div>
+                    <h3 class="feature-title">Scale</h3>
+                    <p class="feature-description">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">How We Work</h2>
+                <p class="body-large section-subtitle">A proven process refined over 147+ projects</p>
+            </div>
+            <div class="process-steps">
+                <div class="process-step fade-in">
+                    <div class="process-number">1</div>
+                    <h3 class="process-title">Discovery</h3>
+                    <p class="process-description">Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">2</div>
+                    <h3 class="process-title">Define</h3>
+                    <p class="process-description">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">3</div>
+                    <h3 class="process-title">Develop</h3>
+                    <p class="process-description">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">4</div>
+                    <h3 class="process-title">Deliver</h3>
+                    <p class="process-description">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="benefits-blur-1"></div>
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">Why Choose ACME</h2>
+                <p class="body-large section-subtitle">We're different where it counts</p>
+            </div>
+            <div class="benefits-list">
+                <div class="benefit-card fade-in">
+                    <div class="benefit-number">1</div>
+                    <h3 class="benefit-title">End-to-end ownership</h3>
+                    <p class="benefit-description">One team from strategy through launch. No handoff gaps, no context loss.</p>
+                </div>
+                <div class="benefit-card fade-in">
+                    <div class="benefit-number">2</div>
+                    <h3 class="benefit-title">Transparent pricing</h3>
+                    <p class="benefit-description">Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                </div>
+                <div class="benefit-card fade-in">
+                    <div class="benefit-number">3</div>
+                    <h3 class="benefit-title">Senior-only teams</h3>
+                    <p class="benefit-description">Every member has 8+ years of experience. No juniors learning on your project.</p>
+                </div>
+                <div class="benefit-card fade-in">
+                    <div class="benefit-number">4</div>
+                    <h3 class="benefit-title">Production-grade code</h3>
+                    <p class="benefit-description">Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                </div>
+                <div class="benefit-card fade-in">
+                    <div class="benefit-number">5</div>
+                    <h3 class="benefit-title">Async-first culture</h3>
+                    <p class="benefit-description">Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">Latest Thinking</h2>
+                <p class="body-large section-subtitle">Insights from the field</p>
+            </div>
+            <div class="blog-grid">
+                <div class="blog-card fade-in">
+                    <div class="blog-image">📐</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Design</span>
+                            <span class="blog-date">MAR 2024</span>
+                        </div>
+                        <h3 class="blog-title">Design Systems at Scale: Lessons from 50 Projects</h3>
+                    </div>
+                </div>
+                <div class="blog-card fade-in">
+                    <div class="blog-image">⚙️</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Engineering</span>
+                            <span class="blog-date">FEB 2024</span>
+                        </div>
+                        <h3 class="blog-title">The Case for Boring Technology in 2024</h3>
+                    </div>
+                </div>
+                <div class="blog-card fade-in">
+                    <div class="blog-image">📊</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Strategy</span>
+                            <span class="blog-date">JAN 2024</span>
+                        </div>
+                        <h3 class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">Client Stories</h2>
+                <p class="body-large section-subtitle">What our partners say about us</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."</p>
+                    <div class="testimonial-author">Marcus Rivera</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."</p>
+                    <div class="testimonial-author">Aisha Kamau</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">Transparent Pricing</h2>
+                <p class="body-large section-subtitle">Choose the plan that fits your needs</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-tier">Starter</h3>
+                    <div class="pricing-price">$4,900<span class="pricing-price-unit">/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-outlined" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card featured fade-in">
+                    <h3 class="pricing-tier">Professional</h3>
+                    <div class="pricing-price">$9,900<span class="pricing-price-unit">/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card fade-in">
+                    <h3 class="pricing-tier">Enterprise</h3>
+                    <div class="pricing-price">Custom</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-outlined" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="headline-large">Frequently Asked Questions</h2>
+                <p class="body-large section-subtitle">Everything you need to know</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        How long does a typical project take?
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Most projects run 8–16 weeks depending on scope.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        What technologies do you work with?
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We're framework-agnostic but most commonly work with React, Next.js, and Node.js.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        Can you work with our existing team?
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutely. We embed seamlessly into existing workflows.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        What does your pricing include?
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Everything: strategy, design, development, QA, and deployment.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <button class="faq-question">
+                        Do you offer ongoing support?
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes. After launch, we offer retainer-based support packages.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="final-cta">
+        <div class="final-cta-blur-1"></div>
+        <div class="container">
+            <div class="final-cta-container fade-in">
+                <h2 class="headline-large">Ready to build something great?</h2>
+                <form class="cta-form">
+                    <input type="email" class="cta-input" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary btn-large">Let's Talk →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">ACME</div>
+                    <p style="color: var(--md-on-surface-variant); margin-top: 1rem;">Build better. Ship faster.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ACME INC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="design-badge">Material</div>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('.cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your interest! We\'ll be in touch soon.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>

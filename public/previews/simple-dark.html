@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME — Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #0A0A0F;
+            --background-alt: #12121A;
+            --foreground: #FAFAFA;
+            --muted: #1A1A24;
+            --muted-foreground: #71717A;
+            --accent: #F59E0B;
+            --accent-foreground: #0A0A0F;
+            --accent-muted: rgba(245, 158, 11, 0.15);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --card: rgba(26, 26, 36, 0.6);
+            --card-solid: #1A1A24;
+            --ring: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", system-ui, sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-muted) 0%, transparent 70%);
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+        }
+
+        .ambient-orb-1 {
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+        }
+
+        .ambient-orb-2 {
+            bottom: -200px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+        }
+
+        @media (max-width: 768px) {
+            .ambient-orb-1, .ambient-orb-2 {
+                width: 400px;
+                height: 400px;
+            }
+        }
+
+        .container {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 3rem;
+            }
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            letter-spacing: -0.025em;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--foreground);
+            text-decoration: none;
+            letter-spacing: 0.025em;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-links a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 200ms ease-out;
+        }
+
+        .nav-links a:hover {
+            color: var(--foreground);
+        }
+
+        .nav-links a:focus-visible {
+            color: var(--accent);
+            outline: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            text-decoration: none;
+            border: none;
+            font-family: inherit;
+            min-height: 44px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-primary:focus-visible {
+            outline: none;
+            ring: 2px;
+            ring-color: var(--accent);
+            ring-offset: 2px;
+            ring-offset-color: var(--background);
+            box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--foreground);
+            border: 1px solid var(--border-hover);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-secondary:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 12rem 0 6rem;
+            text-align: center;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                padding: 14rem 0 8rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero {
+                padding: 16rem 0 10rem;
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.95); }
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--foreground);
+        }
+
+        @media (min-width: 640px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero h1 {
+                font-size: 4.5rem;
+            }
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--muted-foreground);
+            max-width: 48rem;
+            margin: 0 auto 2.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero-subtext {
+                font-size: 1.25rem;
+            }
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 640px) {
+            .hero-cta {
+                flex-direction: row;
+            }
+        }
+
+        .hero-visual {
+            width: 100%;
+            max-width: 56rem;
+            height: 300px;
+            margin: 0 auto;
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .hero-visual {
+                height: 400px;
+            }
+        }
+
+        .hero-visual::before {
+            content: 'ACME';
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.02);
+            letter-spacing: -0.05em;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 0;
+            background: radial-gradient(ellipse at top, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
+        }
+
+        @media (min-width: 768px) {
+            .stats {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .stats {
+                padding: 10rem 0;
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-value {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .features {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features {
+                padding: 10rem 0;
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .section-header h2 {
+                font-size: 3rem;
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            transition: all 300ms ease-out;
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-hover);
+            background: rgba(26, 26, 36, 0.8);
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-muted);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.025em;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 6rem 0;
+            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.02) 0%, transparent 60%);
+        }
+
+        @media (min-width: 768px) {
+            .process {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .process {
+                padding: 10rem 0;
+            }
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .process-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .process-number {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.3;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .process-step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .process-step p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .benefits {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .benefits {
+                padding: 10rem 0;
+            }
+        }
+
+        .benefits-list {
+            max-width: 56rem;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 300ms ease-out;
+        }
+
+        .benefit-item:hover {
+            border-color: var(--border-hover);
+            background: rgba(26, 26, 36, 0.8);
+            transform: translateX(0.5rem);
+        }
+
+        .benefit-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--foreground);
+        }
+
+        .benefit-item p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Blog Section */
+        .blog {
+            padding: 6rem 0;
+            background: radial-gradient(ellipse at bottom, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+        }
+
+        @media (min-width: 768px) {
+            .blog {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .blog {
+                padding: 10rem 0;
+            }
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            transition: all 300ms ease-out;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            border-color: var(--border-hover);
+            background: rgba(26, 26, 36, 0.8);
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.75rem;
+            font-family: "JetBrains Mono", monospace;
+            letter-spacing: 0.025em;
+        }
+
+        .blog-category {
+            color: var(--accent);
+        }
+
+        .blog-date {
+            color: var(--muted-foreground);
+        }
+
+        .blog-card h3 {
+            font-size: 1.125rem;
+            color: var(--foreground);
+            line-height: 1.4;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .testimonials {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .testimonials {
+                padding: 10rem 0;
+            }
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .testimonial-card {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            position: relative;
+            transition: all 300ms ease-out;
+        }
+
+        .testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            border-radius: 0.75rem 0 0 0.75rem;
+            opacity: 0.5;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--border-hover);
+            background: rgba(26, 26, 36, 0.8);
+            transform: scale(1.02);
+        }
+
+        .testimonial-quote {
+            color: var(--foreground);
+            font-size: 0.875rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 0;
+            background: radial-gradient(ellipse at top, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
+        }
+
+        @media (min-width: 768px) {
+            .pricing {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .pricing {
+                padding: 10rem 0;
+            }
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .pricing-card {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2.5rem;
+            transition: all 300ms ease-out;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--border-hover);
+            background: rgba(26, 26, 36, 0.8);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured {
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2), 0 0 30px rgba(245, 158, 11, 0.15);
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-card.featured {
+                transform: scale(1.05) translateY(-1rem);
+            }
+
+            .pricing-card.featured:hover {
+                transform: scale(1.07) translateY(-1rem);
+            }
+        }
+
+        .pricing-tier {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .pricing-price {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .faq {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .faq {
+                padding: 10rem 0;
+            }
+        }
+
+        .faq-list {
+            max-width: 56rem;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 300ms ease-out;
+        }
+
+        .faq-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 1.5rem 2rem;
+            background: transparent;
+            border: none;
+            color: var(--foreground);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 200ms ease-out;
+        }
+
+        .faq-question:focus-visible {
+            outline: none;
+            color: var(--accent);
+        }
+
+        .faq-icon {
+            transition: transform 300ms ease-out;
+            color: var(--accent);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 300ms ease-out, opacity 300ms ease-out;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem 2rem;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 0;
+            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.03) 0%, transparent 60%);
+        }
+
+        @media (min-width: 768px) {
+            .cta {
+                padding: 8rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .cta {
+                padding: 10rem 0;
+            }
+        }
+
+        .cta-content {
+            max-width: 48rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .cta h2 {
+                font-size: 3rem;
+            }
+        }
+
+        .cta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 32rem;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .cta-form {
+                flex-direction: row;
+            }
+        }
+
+        .cta-input {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: all 200ms ease-out;
+            min-height: 44px;
+        }
+
+        .cta-input::placeholder {
+            color: var(--muted-foreground);
+        }
+
+        .cta-input:focus {
+            outline: none;
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 4rem 0 2rem;
+            background: var(--background-alt);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-brand {
+            font-family: "Space Grotesk", system-ui, sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--foreground);
+            letter-spacing: 0.025em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--foreground);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 200ms ease-out;
+        }
+
+        .footer-links a:hover {
+            color: var(--foreground);
+        }
+
+        .footer-links a:focus-visible {
+            color: var(--accent);
+            outline: none;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        /* Design System Badge */
+        .design-badge {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--muted-foreground);
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            font-family: "JetBrains Mono", monospace;
+            letter-spacing: 0.025em;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 600ms ease-out, transform 600ms ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">ACME</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <a href="#cta" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                <span>Est. 2024</span>
+            </div>
+            <h1 class="reveal">Build better. Ship faster.</h1>
+            <p class="hero-subtext reveal">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+            <div class="hero-cta reveal">
+                <a href="#cta" class="btn btn-primary">Start Project</a>
+                <a href="#process" class="btn btn-secondary">Our Process</a>
+            </div>
+            <div class="hero-visual reveal"></div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item reveal">
+                    <div class="stat-value">147+</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-item reveal">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Client Retention</div>
+                </div>
+                <div class="stat-item reveal">
+                    <div class="stat-value">3.2x</div>
+                    <div class="stat-label">Avg. ROI Increase</div>
+                </div>
+                <div class="stat-item reveal">
+                    <div class="stat-value">24h</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>What We Do</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">St</div>
+                    <h3>Strategy</h3>
+                    <p>Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Ds</div>
+                    <h3>Design Systems</h3>
+                    <p>Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Ux</div>
+                    <h3>UX Research</h3>
+                    <p>User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Dv</div>
+                    <h3>Development</h3>
+                    <p>Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">An</div>
+                    <h3>Analytics</h3>
+                    <p>Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">Sc</div>
+                    <h3>Scale</h3>
+                    <p>Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="process">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>How We Work</h2>
+            </div>
+            <div class="process-grid">
+                <div class="process-step reveal">
+                    <div class="process-number">1</div>
+                    <h3>Discovery</h3>
+                    <p>Deep dive into your business goals, user needs, and technical landscape.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-number">2</div>
+                    <h3>Define</h3>
+                    <p>Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-number">3</div>
+                    <h3>Develop</h3>
+                    <p>Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-number">4</div>
+                    <h3>Deliver</h3>
+                    <p>Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Why Choose Us</h2>
+            </div>
+            <div class="benefits-list">
+                <div class="benefit-item reveal">
+                    <h3>End-to-end ownership</h3>
+                    <p>One team from strategy through launch. No handoff gaps, no context loss.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Transparent pricing</h3>
+                    <p>Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Senior-only teams</h3>
+                    <p>Every member has 8+ years of experience. No juniors learning on your project.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Production-grade code</h3>
+                    <p>Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+                </div>
+                <div class="benefit-item reveal">
+                    <h3>Async-first culture</h3>
+                    <p>Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Latest Insights</h2>
+            </div>
+            <div class="blog-grid">
+                <div class="blog-card reveal">
+                    <div class="blog-meta">
+                        <span class="blog-category">Design</span>
+                        <span class="blog-date">MAR 2024</span>
+                    </div>
+                    <h3>Design Systems at Scale: Lessons from 50 Projects</h3>
+                </div>
+                <div class="blog-card reveal">
+                    <div class="blog-meta">
+                        <span class="blog-category">Engineering</span>
+                        <span class="blog-date">FEB 2024</span>
+                    </div>
+                    <h3>The Case for Boring Technology in 2024</h3>
+                </div>
+                <div class="blog-card reveal">
+                    <div class="blog-meta">
+                        <span class="blog-category">Strategy</span>
+                        <span class="blog-date">JAN 2024</span>
+                    </div>
+                    <h3>Pricing Pages That Convert: A Data-Driven Teardown</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>What Our Clients Say</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal">
+                    <p class="testimonial-quote">"Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <p class="testimonial-quote">"The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."</p>
+                    <div class="testimonial-author">Marcus Rivera</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <p class="testimonial-quote">"They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."</p>
+                    <div class="testimonial-author">Aisha Kamau</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Simple, Transparent Pricing</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card reveal">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-price">$4,900</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>2 revision rounds</li>
+                        <li>48h response time</li>
+                        <li>Weekly reports</li>
+                        <li>Slack access</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card featured reveal">
+                    <div class="pricing-tier">Professional</div>
+                    <div class="pricing-price">$9,900</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>3 active projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>24h response time</li>
+                        <li>Daily standups</li>
+                        <li>Dedicated lead</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                </div>
+                <div class="pricing-card reveal">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">tailored to your needs</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Unlimited revisions</li>
+                        <li>Dedicated team</li>
+                        <li>On-site workshops</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>How long does a typical project take?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Most projects run 8–16 weeks depending on scope.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>What technologies do you work with?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We're framework-agnostic but most commonly work with React, Next.js, and Node.js.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>Can you work with our existing team?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutely. We embed seamlessly into existing workflows.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>What does your pricing include?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Everything: strategy, design, development, QA, and deployment.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-question">
+                        <span>Do you offer ongoing support?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes. After launch, we offer retainer-based support packages.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="cta">
+        <div class="container">
+            <div class="cta-content reveal">
+                <h2>Ready to build something great?</h2>
+                <form class="cta-form">
+                    <input type="email" class="cta-input" placeholder="your@email.com" required>
+                    <button type="submit" class="btn btn-primary">Let's Talk →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">ACME</div>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter/X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2024 ACME INC.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Design System Badge -->
+    <div class="design-badge">Minimalist Dark</div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('.cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your interest! We\'ll be in touch soon.');
+        });
+    </script>
+</body>
+</html>

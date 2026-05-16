@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME — Build better. Ship faster.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: #09090B;
+            --foreground: #FAFAFA;
+            --muted: #27272A;
+            --muted-foreground: #A1A1AA;
+            --accent: #DFE104;
+            --accent-foreground: #000000;
+            --border: #3F3F46;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            opacity: 0.03;
+            mix-blend-mode: overlay;
+            z-index: 9999;
+        }
+
+        /* Typography */
+        .text-hero {
+            font-size: clamp(3rem, 12vw, 14rem);
+            line-height: 0.8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+        }
+
+        .text-section-heading {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            line-height: 0.9;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+        }
+
+        .text-massive-number {
+            font-size: clamp(6rem, 15vw, 12rem);
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--background);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 95vw;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            color: var(--foreground);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            color: var(--foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 200ms;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 200ms ease-in-out;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+            height: 3.5rem;
+            padding: 0 2rem;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--foreground);
+            border: 2px solid var(--border);
+            height: 3.5rem;
+            padding: 0 2rem;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--foreground);
+            color: var(--accent-foreground);
+            border-color: var(--foreground);
+        }
+
+        .btn-large {
+            height: 5rem;
+            padding: 0 3rem;
+            font-size: 1.125rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem;
+            max-width: 95vw;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted-foreground);
+            margin-bottom: 2rem;
+        }
+
+        .hero-headline {
+            margin-bottom: 2rem;
+        }
+
+        .hero-subtext {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--muted-foreground);
+            max-width: 48rem;
+            margin-bottom: 3rem;
+            line-height: 1.4;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .hero-visual {
+            width: 100%;
+            height: 24rem;
+            background: linear-gradient(135deg, var(--muted) 0%, var(--background) 100%);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-visual-text {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--muted);
+            opacity: 0.3;
+        }
+
+        /* Marquee Styles */
+        .marquee-container {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            overflow: hidden;
+            background-color: var(--accent);
+            padding: 3rem 0;
+            position: relative;
+        }
+
+        .marquee {
+            display: flex;
+            animation: marquee-scroll 30s linear infinite;
+            width: fit-content;
+        }
+
+        .marquee-fast {
+            animation-duration: 20s;
+        }
+
+        .marquee-slow {
+            animation-duration: 40s;
+        }
+
+        @keyframes marquee-scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 4rem;
+            padding: 0 2rem;
+            white-space: nowrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-number {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--accent-foreground);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+            color: var(--accent-foreground);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            max-width: 10rem;
+            white-space: normal;
+            line-height: 1.2;
+        }
+
+        .stat-separator {
+            font-size: 3rem;
+            color: var(--accent-foreground);
+            opacity: 0.3;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 8rem 2rem;
+            max-width: 90vw;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .section-description {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--muted-foreground);
+            max-width: 48rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            gap: 1px;
+            background-color: var(--border);
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background-color: var(--background);
+            padding: 3rem;
+            position: relative;
+            transition: all 300ms;
+            border: 2px solid var(--border);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            width: 5rem;
+            height: 5rem;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            transition: all 300ms;
+        }
+
+        .feature-card:hover .feature-icon {
+            border-color: var(--accent-foreground);
+        }
+
+        .feature-icon-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--foreground);
+            transition: all 300ms;
+        }
+
+        .feature-card:hover .feature-icon-text {
+            color: var(--accent-foreground);
+        }
+
+        .feature-title {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            transition: all 300ms;
+        }
+
+        .feature-card:hover .feature-title {
+            color: var(--accent-foreground);
+        }
+
+        .feature-description {
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            color: var(--muted-foreground);
+            line-height: 1.4;
+            transition: all 300ms;
+        }
+
+        .feature-card:hover .feature-description {
+            color: var(--accent-foreground);
+        }
+
+        /* Process Steps */
+        .process-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .process-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .process-number {
+            font-size: clamp(6rem, 12vw, 10rem);
+            font-weight: 700;
+            color: var(--muted);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .process-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .process-description {
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+            color: var(--muted-foreground);
+            line-height: 1.4;
+        }
+
+        /* Benefits */
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border: 2px solid var(--border);
+        }
+
+        .benefit-item {
+            padding: 3rem;
+            border-bottom: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 300ms;
+        }
+
+        .benefit-item:last-child {
+            border-bottom: none;
+        }
+
+        .benefit-item:hover {
+            background-color: var(--accent);
+        }
+
+        .benefit-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-number {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--muted);
+            line-height: 1;
+            min-width: 5rem;
+            transition: all 300ms;
+        }
+
+        .benefit-item:hover .benefit-number {
+            color: var(--accent-foreground);
+            transform: translateX(2rem);
+        }
+
+        .benefit-title {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            transition: all 300ms;
+        }
+
+        .benefit-item:hover .benefit-title {
+            color: var(--accent-foreground);
+        }
+
+        .benefit-description {
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            color: var(--muted-foreground);
+            padding-left: calc(5rem + 2rem);
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 300ms;
+        }
+
+        .benefit-item:hover .benefit-description {
+            opacity: 1;
+            max-height: 10rem;
+            color: var(--accent-foreground);
+        }
+
+        @media (max-width: 767px) {
+            .benefit-description {
+                opacity: 1;
+                max-height: none;
+                padding-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .benefit-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Blog */
+        .blog-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            border: 2px solid var(--border);
+            padding: 3rem;
+            transition: all 300ms;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .blog-category {
+            color: var(--accent);
+            transition: all 300ms;
+        }
+
+        .blog-card:hover .blog-category {
+            color: var(--accent-foreground);
+        }
+
+        .blog-date {
+            color: var(--muted-foreground);
+            transition: all 300ms;
+        }
+
+        .blog-card:hover .blog-date {
+            color: var(--accent-foreground);
+        }
+
+        .blog-title {
+            font-size: clamp(1.25rem, 2vw, 1.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            transition: all 300ms;
+        }
+
+        .blog-card:hover .blog-title {
+            color: var(--accent-foreground);
+        }
+
+        /* Testimonials Marquee */
+        .testimonials-marquee {
+            background-color: var(--background);
+            padding: 6rem 0;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            overflow: hidden;
+        }
+
+        .testimonial-card {
+            background-color: var(--background);
+            border: 2px solid var(--border);
+            padding: 3rem;
+            min-width: 32rem;
+            max-width: 32rem;
+            margin: 0 1rem;
+        }
+
+        .testimonial-quote {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            color: var(--foreground);
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            gap: 1px;
+            background-color: var(--border);
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .pricing-card {
+            background-color: var(--background);
+            border: 2px solid var(--border);
+            padding: 3rem;
+            transition: all 300ms;
+        }
+
+        .pricing-card.featured {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .pricing-card.featured * {
+            color: var(--accent-foreground);
+        }
+
+        .pricing-name {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            color: var(--muted-foreground);
+        }
+
+        .pricing-card.featured .pricing-name {
+            color: var(--accent-foreground);
+        }
+
+        .pricing-price {
+            font-size: clamp(3rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card.featured .pricing-period {
+            color: var(--accent-foreground);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-feature {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+        }
+
+        .pricing-feature:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-card.featured .pricing-feature {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* FAQ */
+        .faq-list {
+            max-width: 56rem;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border: 2px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            padding: 2rem;
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 300ms;
+        }
+
+        .faq-question:hover {
+            background-color: var(--muted);
+        }
+
+        .faq-icon {
+            font-size: 2rem;
+            font-weight: 700;
+            transition: transform 300ms;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 300ms ease-out;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 20rem;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 2rem 2rem;
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+            color: var(--muted-foreground);
+            line-height: 1.6;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background-color: var(--accent);
+            padding: 8rem 2rem;
+            text-align: center;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+        }
+
+        .final-cta-title {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            color: var(--accent-foreground);
+            margin-bottom: 3rem;
+            line-height: 0.9;
+        }
+
+        .final-cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 48rem;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .final-cta-input {
+            flex: 1;
+            min-width: 16rem;
+            height: 6rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--accent-foreground);
+            color: var(--accent-foreground);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        .final-cta-input::placeholder {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        .final-cta-input:focus {
+            outline: none;
+            border-bottom-color: var(--accent-foreground);
+        }
+
+        .final-cta-button {
+            background-color: var(--accent-foreground);
+            color: var(--accent);
+            height: 6rem;
+            padding: 0 3rem;
+            font-size: 1.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--background);
+            border-top: 2px solid var(--border);
+            padding: 6rem 2rem 3rem;
+        }
+
+        .footer-container {
+            max-width: 90vw;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 2fr repeat(3, 1fr);
+            }
+        }
+
+        .footer-brand {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-column-title {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            color: var(--muted-foreground);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-link {
+            color: var(--foreground);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 200ms;
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            padding-top: 3rem;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Design System Badge */
+        .ds-badge {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 1000;
+            border: 2px solid var(--accent-foreground);
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .marquee {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Noise Overlay -->
+    <svg class="noise-overlay" xmlns="http://www.w3.org/2000/svg">
+        <filter id="noise">
+            <feTurbulence baseFrequency="0.8" numOctaves="4" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)" />
+    </svg>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">ACME</a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#process" class="nav-link">Process</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#cta" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-label">EST. 2024</div>
+        <h1 class="hero-headline text-hero">BUILD BETTER.<br>SHIP FASTER.</h1>
+        <p class="hero-subtext">We help ambitious teams transform complex ideas into elegant digital products. Strategy, design, and engineering — unified.</p>
+        <div class="hero-cta">
+            <a href="#cta" class="btn btn-primary btn-large">Start Project</a>
+            <a href="#process" class="btn btn-outline btn-large">Our Process</a>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-visual-text">ACME</div>
+        </div>
+    </section>
+
+    <!-- Stats Marquee -->
+    <div class="marquee-container">
+        <div class="marquee marquee-fast">
+            <div class="marquee-content">
+                <div class="stat-item">
+                    <div class="stat-number">147+</div>
+                    <div class="stat-label">PROJECTS DELIVERED</div>
+                </div>
+                <div class="stat-separator">●</div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">CLIENT RETENTION</div>
+                </div>
+                <div class="stat-separator">●</div>
+                <div class="stat-item">
+                    <div class="stat-number">3.2X</div>
+                    <div class="stat-label">AVG. ROI INCREASE</div>
+                </div>
+                <div class="stat-separator">●</div>
+                <div class="stat-item">
+                    <div class="stat-number">24H</div>
+                    <div class="stat-label">RESPONSE TIME</div>
+                </div>
+                <div class="stat-separator">●</div>
+            </div>
+            <div class="marquee-content" aria-hidden="true">
+                <div class="stat-item">
+                    <div class="stat-number">147+</div>
+                    <div class="stat-label">PROJECTS DELIVERED</div>
+                </div>
+                <div class="stat-separator">●</div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">CLIENT RETENTION</div>
+                </div>
+                <div class="stat-separator">●</div>
+                <div class="stat-item">
+                    <div class="stat-number">3.2X</div>
+                    <div class="stat-label">AVG. ROI INCREASE</div>
+                </div>
+                <div class="stat-separator">●</div>
+                <div class="stat-item">
+                    <div class="stat-number">24H</div>
+                    <div class="stat-label">RESPONSE TIME</div>
+                </div>
+                <div class="stat-separator">●</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="section-header">
+            <h2 class="section-title text-section-heading">WHAT WE DO</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <div class="feature-icon-text">St</div>
+                </div>
+                <h3 class="feature-title">STRATEGY</h3>
+                <p class="feature-description">Market research, competitive analysis, and go-to-market planning that aligns with your business objectives.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <div class="feature-icon-text">Ds</div>
+                </div>
+                <h3 class="feature-title">DESIGN SYSTEMS</h3>
+                <p class="feature-description">Scalable component libraries and design tokens that ensure consistency across every touchpoint.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <div class="feature-icon-text">Ux</div>
+                </div>
+                <h3 class="feature-title">UX RESEARCH</h3>
+                <p class="feature-description">User interviews, usability testing, and data-driven insights that inform every design decision.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <div class="feature-icon-text">Dv</div>
+                </div>
+                <h3 class="feature-title">DEVELOPMENT</h3>
+                <p class="feature-description">Full-stack engineering with modern frameworks, optimized for performance and maintainability.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <div class="feature-icon-text">An</div>
+                </div>
+                <h3 class="feature-title">ANALYTICS</h3>
+                <p class="feature-description">Custom dashboards, event tracking, and conversion optimization to measure what matters.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <div class="feature-icon-text">Sc</div>
+                </div>
+                <h3 class="feature-title">SCALE</h3>
+                <p class="feature-description">Infrastructure architecture, CI/CD pipelines, and performance tuning for growth-stage products.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="section">
+        <div class="section-header">
+            <h2 class="section-title text-section-heading">HOW WE WORK</h2>
+        </div>
+        <div class="process-grid">
+            <div class="process-step">
+                <div class="process-number">01</div>
+                <h3 class="process-title">DISCOVERY</h3>
+                <p class="process-description">Deep dive into your business goals, user needs, and technical landscape.</p>
+            </div>
+            <div class="process-step">
+                <div class="process-number">02</div>
+                <h3 class="process-title">DEFINE</h3>
+                <p class="process-description">Strategy crystallized into wireframes, prototypes, and technical specifications.</p>
+            </div>
+            <div class="process-step">
+                <div class="process-number">03</div>
+                <h3 class="process-title">DEVELOP</h3>
+                <p class="process-description">Agile sprints with weekly demos. Clean code, comprehensive testing, continuous deployment.</p>
+            </div>
+            <div class="process-step">
+                <div class="process-number">04</div>
+                <h3 class="process-title">DELIVER</h3>
+                <p class="process-description">Launch support, performance monitoring, and iterative optimization based on real user data.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title text-section-heading">WHY CHOOSE US</h2>
+        </div>
+        <div class="benefits-list">
+            <div class="benefit-item">
+                <div class="benefit-header">
+                    <div class="benefit-number">01</div>
+                    <h3 class="benefit-title">END-TO-END OWNERSHIP</h3>
+                </div>
+                <p class="benefit-description">One team from strategy through launch. No handoff gaps, no context loss.</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-header">
+                    <div class="benefit-number">02</div>
+                    <h3 class="benefit-title">TRANSPARENT PRICING</h3>
+                </div>
+                <p class="benefit-description">Fixed-scope engagements with clear milestones. No surprise invoices.</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-header">
+                    <div class="benefit-number">03</div>
+                    <h3 class="benefit-title">SENIOR-ONLY TEAMS</h3>
+                </div>
+                <p class="benefit-description">Every member has 8+ years of experience. No juniors learning on your project.</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-header">
+                    <div class="benefit-number">04</div>
+                    <h3 class="benefit-title">PRODUCTION-GRADE CODE</h3>
+                </div>
+                <p class="benefit-description">Tested, documented, and built to scale. Your codebase is an asset, not a liability.</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-header">
+                    <div class="benefit-number">05</div>
+                    <h3 class="benefit-title">ASYNC-FIRST CULTURE</h3>
+                </div>
+                <p class="benefit-description">Deep work over meetings. Weekly syncs, daily Loom updates, Slack for the rest.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="section">
+        <div class="section-header">
+            <h2 class="section-title text-section-heading">LATEST INSIGHTS</h2>
+        </div>
+        <div class="blog-grid">
+            <article class="blog-card">
+                <div class="blog-meta">
+                    <span class="blog-category">DESIGN</span>
+                    <span class="blog-date">MAR 2024</span>
+                </div>
+                <h3 class="blog-title">Design Systems at Scale: Lessons from 50 Projects</h3>
+            </article>
+            <article class="blog-card">
+                <div class="blog-meta">
+                    <span class="blog-category">ENGINEERING</span>
+                    <span class="blog-date">FEB 2024</span>
+                </div>
+                <h3 class="blog-title">The Case for Boring Technology in 2024</h3>
+            </article>
+            <article class="blog-card">
+                <div class="blog-meta">
+                    <span class="blog-category">STRATEGY</span>
+                    <span class="blog-date">JAN 2024</span>
+                </div>
+                <h3 class="blog-title">Pricing Pages That Convert: A Data-Driven Teardown</h3>
+            </article>
+        </div>
+    </section>
+
+    <!-- Testimonials Marquee -->
+    <div class="testimonials-marquee">
+        <div class="marquee marquee-slow">
+            <div class="marquee-content">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."</p>
+                    <div class="testimonial-author">SARAH CHEN</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."</p>
+                    <div class="testimonial-author">MARCUS RIVERA</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."</p>
+                    <div class="testimonial-author">AISHA KAMAU</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+            <div class="marquee-content" aria-hidden="true">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"Working with Acme felt like adding senior engineers to our team. They understood our codebase faster than most full-time hires."</p>
+                    <div class="testimonial-author">SARAH CHEN</div>
+                    <div class="testimonial-role">CTO at Vertex</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"The design system they built has been our foundation for 3 years. Every new feature ships faster because of that initial investment."</p>
+                    <div class="testimonial-author">MARCUS RIVERA</div>
+                    <div class="testimonial-role">VP Product at Helix</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"They didn't just build what we asked for — they challenged our assumptions and the final product was significantly better for it."</p>
+                    <div class="testimonial-author">AISHA KAMAU</div>
+                    <div class="testimonial-role">Founder at Prism</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section">
+        <div class="section-header">
+            <h2 class="section-title text-section-heading">TRANSPARENT PRICING</h2>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">STARTER</div>
+                <div class="pricing-price">$4,900</div>
+                <div class="pricing-period">/MONTH</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">1 active project</li>
+                    <li class="pricing-feature">2 revision rounds</li>
+                    <li class="pricing-feature">48h response time</li>
+                    <li class="pricing-feature">Weekly reports</li>
+                    <li class="pricing-feature">Slack access</li>
+                </ul>
+                <a href="#cta" class="btn btn-outline" style="width: 100%;">GET STARTED</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-name">PROFESSIONAL</div>
+                <div class="pricing-price">$9,900</div>
+                <div class="pricing-period">/MONTH</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">3 active projects</li>
+                    <li class="pricing-feature">Unlimited revisions</li>
+                    <li class="pricing-feature">24h response time</li>
+                    <li class="pricing-feature">Daily standups</li>
+                    <li class="pricing-feature">Dedicated lead</li>
+                </ul>
+                <a href="#cta" class="btn btn-primary" style="width: 100%; background-color: var(--accent-foreground); color: var(--accent);">GET STARTED</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">ENTERPRISE</div>
+                <div class="pricing-price">CUSTOM</div>
+                <div class="pricing-period">PRICING</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">Unlimited projects</li>
+                    <li class="pricing-feature">Unlimited revisions</li>
+                    <li class="pricing-feature">Dedicated team</li>
+                    <li class="pricing-feature">On-site workshops</li>
+                    <li class="pricing-feature">SLA guarantee</li>
+                </ul>
+                <a href="#cta" class="btn btn-outline" style="width: 100%;">CONTACT SALES</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+        <div class="section-header">
+            <h2 class="section-title text-section-heading">FREQUENTLY ASKED</h2>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>HOW LONG DOES A TYPICAL PROJECT TAKE?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">Most projects run 8–16 weeks depending on scope.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>WHAT TECHNOLOGIES DO YOU WORK WITH?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">We're framework-agnostic but most commonly work with React, Next.js, and Node.js.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>CAN YOU WORK WITH OUR EXISTING TEAM?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">Absolutely. We embed seamlessly into existing workflows.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>WHAT DOES YOUR PRICING INCLUDE?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">Everything: strategy, design, development, QA, and deployment.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>DO YOU OFFER ONGOING SUPPORT?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">Yes. After launch, we offer retainer-based support packages.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="cta" class="final-cta">
+        <h2 class="final-cta-title">READY TO BUILD<br>SOMETHING GREAT?</h2>
+        <form class="final-cta-form">
+            <input type="email" class="final-cta-input" placeholder="YOUR EMAIL" required>
+            <button type="submit" class="btn btn-primary final-cta-button">LET'S TALK →</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">ACME</div>
+                </div>
+                <div>
+                    <h3 class="footer-column-title">PRODUCT</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features" class="footer-link">Features</a></li>
+                        <li><a href="#pricing" class="footer-link">Pricing</a></li>
+                        <li><a href="#" class="footer-link">Case Studies</a></li>
+                        <li><a href="#" class="footer-link">Changelog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-column-title">COMPANY</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">About</a></li>
+                        <li><a href="#blog" class="footer-link">Blog</a></li>
+                        <li><a href="#" class="footer-link">Careers</a></li>
+                        <li><a href="#cta" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-column-title">CONNECT</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Twitter/X</a></li>
+                        <li><a href="#" class="footer-link">LinkedIn</a></li>
+                        <li><a href="#" class="footer-link">GitHub</a></li>
+                        <li><a href="#" class="footer-link">Dribbble</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2024 ACME INC.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Design System Badge -->
+    <div class="ds-badge">KINETIC</div>
+
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('.final-cta-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thanks for your interest! We\'ll be in touch soon.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
